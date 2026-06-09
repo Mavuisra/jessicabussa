@@ -1,14 +1,19 @@
 RewriteEngine On
 
+# Autoriser l'accès public (annule un éventuel Deny sur un dossier parent)
+<IfModule mod_authz_core.c>
+    Require all granted
+</IfModule>
+
 # Fichiers statiques servis directement
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.php [L]
 
-# Sécurité de base
+Options -Indexes
+
+# Headers sécurité (si mod_headers disponible)
 <IfModule mod_headers.c>
     Header set X-Content-Type-Options "nosniff"
     Header set X-Frame-Options "SAMEORIGIN"
 </IfModule>
-
-Options -Indexes

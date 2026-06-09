@@ -24,6 +24,31 @@ Ouvrir : **http://127.0.0.1:8080/**
 
 ## Déploiement LWS (hébergement mutualisé)
 
+> **Erreur 403 Forbidden ?** Voir la section [Dépannage 403](#dépannage-403-forbidden) en bas.
+
+### Structure obligatoire sur LWS
+
+Le domaine pointe vers le dossier **`www`** (ou `public_html`). **Seul le contenu du dossier `public/`** doit s'y trouver :
+
+```
+/home/votrecompte/
+├── www/                      ← DocumentRoot (contenu de public/ UNIQUEMENT)
+│   ├── index.php
+│   ├── .htaccess
+│   ├── router.php            (optionnel, dev)
+│   └── static/
+├── vendor/                   ← un niveau AU-DESSUS de www/
+├── src/
+├── config/
+├── templates/
+├── storage/
+├── media/
+├── .env
+└── (PAS de .htaccess ici)    ← ne jamais mettre « Deny all » à cette racine
+```
+
+**Via FTP LWS :** uploadez le **contenu** de `public/` dans `www/`, pas le dossier `public/` lui-même.
+
 ### 1. Upload des fichiers
 
 Uploader sur le serveur LWS (FTP ou gestionnaire de fichiers) :
