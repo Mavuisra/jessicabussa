@@ -13,7 +13,7 @@ function env(string $key, mixed $default = null): mixed
     static $vars = [];
 
     if (!$loaded) {
-        $path = dirname(__DIR__) . '/.env';
+        $path = base_path('.env');
         if (is_file($path)) {
             foreach (file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
                 $line = trim($line);
@@ -34,19 +34,21 @@ function config(string $file): array
 {
     static $cache = [];
     if (!isset($cache[$file])) {
-        $cache[$file] = require dirname(__DIR__) . '/config/' . $file . '.php';
+        $cache[$file] = require base_path('config/' . $file . '.php');
     }
     return $cache[$file];
 }
 
 function base_path(string $path = ''): string
 {
-    return dirname(__DIR__) . ($path ? DIRECTORY_SEPARATOR . ltrim($path, '/\\') : '');
+    $root = defined('BASE_PATH') ? BASE_PATH : dirname(__DIR__);
+    return $root . ($path ? DIRECTORY_SEPARATOR . ltrim(str_replace('/', DIRECTORY_SEPARATOR, $path), '/\\') : '');
 }
 
 function public_path(string $path = ''): string
 {
-    return base_path('public' . ($path ? '/' . ltrim($path, '/') : ''));
+    $public = is_dir(base_path('public')) ? base_path('public') : base_path();
+    return $public . ($path ? DIRECTORY_SEPARATOR . ltrim(str_replace('/', DIRECTORY_SEPARATOR, $path), '/\\') : '');
 }
 
 function storage_path(string $path = ''): string

@@ -2,7 +2,8 @@
 
 declare(strict_types=1);
 
-require dirname(__DIR__) . '/vendor/autoload.php';
+require dirname(__DIR__) . '/bootstrap/app.php';
+bootstrap_app(__FILE__);
 
 use App\Core\Application;
 
