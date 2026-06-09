@@ -9,8 +9,8 @@ if ($driver === 'mysql') {
         'driver' => 'mysql',
         'host' => env('DB_HOST', '127.0.0.1'),
         'port' => env('DB_PORT', '3306'),
-        'database' => env('DB_NAME', 'jessicabussa'),
-        'username' => env('DB_USER', 'root'),
+        'database' => env('DB_NAME', 'lasav2675681_12lmwo'),
+        'username' => env('DB_USER', 'lasav2675681'),
         'password' => env('DB_PASSWORD', ''),
         'charset' => 'utf8mb4',
     ];

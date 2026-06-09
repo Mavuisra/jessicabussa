@@ -151,5 +151,6 @@ LWS place souvent `default_index.html` dans `htdocs/`. Apache l'affiche **avant*
 2. Supprimez la page LWS : `rm -f default_index.html`
 3. Vérifiez : `ls index.php` doit exister à la racine
 4. Lancez : `bash scripts/lws-setup.sh`
+5. Copiez la config prod : `cp .env.production .env` (ou uploadez `.env.production` depuis votre PC et renommez en `.env`)
 
 Le fichier `.htaccess` à la racine contient `DirectoryIndex index.php` pour forcer PHP.

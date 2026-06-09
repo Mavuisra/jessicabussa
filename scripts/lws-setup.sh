@@ -15,6 +15,13 @@ else
     echo "Attention: composer absent — uploadez vendor/ depuis votre PC"
 fi
 
+echo "Configuration .env..."
+if [ ! -f .env ] && [ -f .env.production ]; then
+    cp .env.production .env
+elif [ ! -f .env ] && [ -f .env.production.example ]; then
+    cp .env.production.example .env
+fi
+
 echo "Permissions storage/media..."
 chmod -R 775 storage media 2>/dev/null || true
 
