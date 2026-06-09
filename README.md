@@ -140,3 +140,16 @@ Message LWS : *« You do not have permission to access this document »*.
 - [ ] `www/.htaccess` contient `Require all granted`
 - [ ] Pas de `.htaccess` avec `Deny from all` hors de `www/`
 - [ ] `../vendor/autoload.php` existe (vendor au même niveau que `www/`)
+
+## Dépannage : page `default_index.html` LWS
+
+LWS place souvent `default_index.html` dans `htdocs/`. Apache l'affiche **avant** votre app si `index.php` est absent ou mal priorisé.
+
+**Si vous avez cloné Git dans `htdocs/jessicabussa.cd/`** (racine = dépôt) :
+
+1. `git pull origin main`
+2. Supprimez la page LWS : `rm -f default_index.html`
+3. Vérifiez : `ls index.php` doit exister à la racine
+4. Lancez : `bash scripts/lws-setup.sh`
+
+Le fichier `.htaccess` à la racine contient `DirectoryIndex index.php` pour forcer PHP.

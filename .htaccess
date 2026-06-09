@@ -1,21 +1,22 @@
-RewriteEngine On
-
-# LWS : index.php avant default_index.html
+# LWS : forcer index.php avant default_index.html
 DirectoryIndex index.php index.html
 
-# Autoriser l'accès public (annule un éventuel Deny sur un dossier parent)
+RewriteEngine On
+
 <IfModule mod_authz_core.c>
     Require all granted
 </IfModule>
 
-# Fichiers statiques servis directement
+# Assets (repo cloné avec public/ en sous-dossier)
+RewriteRule ^static/(.*)$ public/static/$1 [L]
+
+# Fichiers uploadés
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.php [L]
 
 Options -Indexes
 
-# Headers sécurité (si mod_headers disponible)
 <IfModule mod_headers.c>
     Header set X-Content-Type-Options "nosniff"
     Header set X-Frame-Options "SAMEORIGIN"
