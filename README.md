@@ -48,8 +48,8 @@ Structure recommandée sur LWS :
 ### 2. Base de données MySQL
 
 1. Créer une base MySQL dans **LWS Panel**
-2. Importer `database/schema.sql` (adapter la syntaxe SQLite → MySQL si nécessaire)
-3. Configurer `.env` :
+2. Importer `database/schema.mysql.sql` dans phpMyAdmin (LWS Panel)
+3. Copier `.env.production.example` → `.env` et remplir les identifiants LWS :
 
 ```env
 APP_ENV=production
@@ -95,5 +95,5 @@ src/            → Core, Models, Controllers, Services
 templates/      → Vues PHP
 storage/        → Sessions
 media/          → Uploads
-database/       → schema.sql
+database/       → schema.sql (SQLite), schema.mysql.sql (LWS)
 ```

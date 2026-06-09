@@ -2,6 +2,7 @@
 .env
 *.env
 !.env.example
+!.env.production.example
 
 # Fichiers personnels (copie home — ne pas versionner)
 .bashrc
@@ -19,6 +20,7 @@
 /storage/sessions/*
 !/storage/sessions/.gitkeep
 composer.phar
+composer.lock
 
 # Base de données locale
 *.sqlite3
