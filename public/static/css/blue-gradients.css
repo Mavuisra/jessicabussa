@@ -1,0 +1,137 @@
+/* Styles de dégradés bleus pour tout le site */
+
+/* Couleurs principales */
+:root {
+    --blue-dark: #cad0d6;
+    --blue-medium: #23a2f7;
+    --blue-light: #4BB4FF;
+}
+
+/* Dégradé de base */
+.blue-gradient {
+    background-image: linear-gradient(135deg, #0063C9, #bed1dd, #4BB4FF);
+}
+
+/* Texte en dégradé */
+.text-gradient {
+    background-image: linear-gradient(135deg, #0063C9, #23a2f7, #4BB4FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+}
+
+/* Bouton avec dégradé */
+.btn-gradient {
+    background-image: linear-gradient(135deg, #0063C9, #23a2f7, #4BB4FF);
+    color: white;
+    transition: all 0.3s ease;
+    background-size: 200% auto;
+}
+
+.btn-gradient:hover {
+    background-position: right center;
+    box-shadow: 0 7px 14px rgba(0, 99, 201, 0.2);
+}
+
+/* Section hero avec dégradé */
+.hero-gradient {
+    background-image: linear-gradient(135deg, #0063C9, #23a2f7, #4BB4FF);
+}
+
+.hero-gradient-dark {
+    background-image: linear-gradient(135deg, #0b346e, #0063C9, #23a2f7);
+}
+
+/* Animation pour le dégradé */
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.gradient-animation {
+    background-size: 300% 300%;
+    animation: gradientBG 12s ease infinite;
+}
+
+/* Icônes avec dégradé */
+.gradient-icon {
+    background-image: linear-gradient(135deg, #0063C9, #23a2f7, #4BB4FF);
+    color: white;
+}
+
+/* Bordure avec dégradé */
+.gradient-border {
+    border-color: #23a2f7;
+}
+
+.gradient-border-left {
+    border-left: 3px solid #23a2f7;
+}
+
+.gradient-border-bottom {
+    position: relative;
+}
+
+.gradient-border-bottom::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-image: linear-gradient(135deg, #0063C9, #23a2f7, #4BB4FF);
+    transition: width 0.3s ease;
+}
+
+.gradient-border-bottom:hover::after {
+    width: 100%;
+}
+
+/* Fond de section avec dégradé */
+.section-gradient-light {
+    background: linear-gradient(135deg, rgba(0, 99, 201, 0.05), rgba(35, 162, 247, 0.05));
+}
+
+.section-gradient-medium {
+    background: linear-gradient(135deg, rgba(0, 99, 201, 0.1), rgba(35, 162, 247, 0.1));
+}
+
+.section-gradient-dark {
+    background: linear-gradient(135deg, rgba(0, 99, 201, 0.9), rgba(35, 162, 247, 0.9));
+}
+
+/* Ombres avec couleur bleue */
+.blue-shadow {
+    box-shadow: 0 4px 10px rgba(0, 99, 201, 0.2);
+}
+
+.blue-shadow-lg {
+    box-shadow: 0 10px 25px rgba(0, 99, 201, 0.25);
+}
+
+/* Animations de fade-in */
+.fade-in {
+    animation: fadeIn 0.6s ease forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Surbrillance des éléments actifs */
+.blue-glow:focus {
+    box-shadow: 0 0 0 3px rgba(35, 162, 247, 0.5);
+}
+
+/* Effets de survol pour les cartes */
+.hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 99, 201, 0.15);
+} 

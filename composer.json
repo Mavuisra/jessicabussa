@@ -1,0 +1,19 @@
+{
+    "name": "jessicabussa/portfolio",
+    "description": "Portfolio Jessica Bussa - PHP POO MVC",
+    "type": "project",
+    "require": {
+        "php": ">=8.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        },
+        "classmap": [
+            "src/Models/Service.php"
+        ],
+        "files": [
+            "src/helpers.php"
+        ]
+    }
+}

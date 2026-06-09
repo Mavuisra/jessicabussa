@@ -1,0 +1,350 @@
+﻿<!-- Hero Section -->
+<section class="relative bg-gradient-to-r from-gray-900 to-secondary text-white py-16">
+    <div class="absolute inset-0 bg-cover bg-center opacity-20" style="background-image: url('<?= asset('images/home/baleniere.jpg') ?>');"></div>
+    <div class="container mx-auto px-4 relative">
+        <div class="max-w-3xl">
+            <h1 class="text-4xl font-bold mb-4">Carrière & Ambitions</h1>
+            <p class="text-xl mb-6">Mon parcours professionnel et mes aspirations pour l'avenir.</p>
+            <div class="flex flex-wrap gap-3">
+                <a href="#parcours" class="bg-white text-secondary hover:bg-gray-100 px-6 py-3 rounded-full transition duration-300">
+                    <i class="fas fa-briefcase mr-2"></i> Mon Parcours
+                </a>
+                <a href="<?= url('contact') ?>" class="bg-transparent border-2 border-white hover:bg-white hover:text-secondary px-6 py-3 rounded-full transition duration-300">
+                    <i class="fas fa-envelope mr-2"></i> Contact
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Career Overview Section -->
+<section id="parcours" class="py-16 bg-light">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+            <div class="w-full md:w-1/2" data-aos="fade-right">
+                <img src="<?= asset('images/home/about.png') ?>" alt="Jessica Bussa Career" class="rounded-2xl shadow-lg w-full hover-lift">
+            </div>
+            <div class="w-full md:w-1/2" data-aos="fade-left">
+                <div class="inline-block px-3 py-1 rounded-full bg-secondary/10 text-secondary text-sm font-semibold mb-4">
+                    <i class="fas fa-user-tie mr-1"></i> Parcours Professionnel
+                </div>
+                <h2 class="text-2xl md:text-3xl font-serif text-primary mb-4 md:mb-6">
+                    Une Carrière Diversifiée et Engagée
+                </h2>
+                <p class="text-base md:text-lg mb-3 md:mb-4">
+                    Mon parcours professionnel est marqué par un engagement constant envers l'excellence et le développement, tant dans le secteur privé que public.
+                </p>
+                <p class="text-base md:text-lg mb-5 md:mb-6">
+                    De l'entrepreneuriat à l'administration publique, chaque étape de ma carrière a été guidée par ma passion pour le leadership et ma volonté de contribuer positivement à la société.
+                </p>
+                <div class="grid grid-cols-2 gap-3 md:gap-4 mb-6 md:mb-8">
+                    <div class="glass p-3 md:p-4 rounded-xl shadow-md">
+                        <i class="fas fa-briefcase text-xl md:text-2xl text-secondary mb-1 md:mb-2"></i>
+                        <h3 class="font-semibold">Entrepreneuriat</h3>
+                        <p class="text-xs md:text-sm">Fondatrice et Directrice</p>
+                    </div>
+                    <div class="glass p-3 md:p-4 rounded-xl shadow-md">
+                        <i class="fas fa-landmark text-xl md:text-2xl text-secondary mb-1 md:mb-2"></i>
+                        <h3 class="font-semibold">Secteur Public</h3>
+                        <p class="text-xs md:text-sm">Administration et Politique</p>
+                    </div>
+                    <div class="glass p-3 md:p-4 rounded-xl shadow-md">
+                        <i class="fas fa-globe text-xl md:text-2xl text-secondary mb-1 md:mb-2"></i>
+                        <h3 class="font-semibold">International</h3>
+                        <p class="text-xs md:text-sm">Consultante et Conférencière</p>
+                    </div>
+                    <div class="glass p-3 md:p-4 rounded-xl shadow-md">
+                        <i class="fas fa-heart text-xl md:text-2xl text-secondary mb-1 md:mb-2"></i>
+                        <h3 class="font-semibold">Impact Social</h3>
+                        <p class="text-xs md:text-sm">Leadership Communautaire</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Career Timeline -->
+<section class="py-16 bg-gray-50">
+    <div class="container px-4 mx-auto">
+        <div class="text-center mb-10">
+            <p class="text-secondary uppercase tracking-widest font-semibold text-sm">Mon Histoire</p>
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Parcours Professionnel</h2>
+            <div class="w-20 h-1 bg-secondary mx-auto mb-6"></div>
+            <p class="max-w-2xl mx-auto text-gray-600">
+                Découvrez les étapes clés de mon parcours professionnel et les expériences qui ont façonné ma carrière.
+            </p>
+        </div>
+
+        <div class="relative max-w-4xl mx-auto">
+            <!-- Ligne verticale pour la timeline -->
+            <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-secondary"></div>
+            
+            <!-- Timeline items -->
+            <div class="relative z-10">
+                <!-- Item 1 -->
+                <div class="flex flex-col md:flex-row items-center mb-12">
+                    <div class="md:w-1/2 md:pr-8 md:text-right order-2 md:order-1">
+                        <div class="glass p-6 rounded-xl shadow-md hover-lift">
+                            <h3 class="text-xl font-semibold mb-2">Fondatrice et Directrice, Okapi Consulting</h3>
+                            <p class="text-gray-500 text-sm mb-3">2015 - Présent</p>
+                            <p class="text-gray-600">Création et direction d'une entreprise de conseil et d'événementiel, offrant des services professionnels sur mesure aux organisations publiques et privées.</p>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 flex justify-center items-center order-1 md:order-2 mb-4 md:mb-0">
+                        <div class="w-12 h-12 rounded-full bg-secondary flex items-center justify-center shadow-lg">
+                            <i class="fas fa-briefcase text-white"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Item 2 -->
+                <div class="flex flex-col md:flex-row items-center mb-12">
+                    <div class="md:w-1/2 md:pl-8 order-2">
+                        <div class="glass p-6 rounded-xl shadow-md hover-lift">
+                            <h3 class="text-xl font-semibold mb-2">Présidente, Fondation Maboko Ya Elikia</h3>
+                            <p class="text-gray-500 text-sm mb-3">2016 - Présent</p>
+                            <p class="text-gray-600">Création et direction d'une fondation dédiée à l'autonomisation des femmes et des jeunes défavorisés, avec mise en place de programmes de formation et de soutien.</p>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 flex justify-center items-center order-1 mb-4 md:mb-0">
+                        <div class="w-12 h-12 rounded-full bg-secondary flex items-center justify-center shadow-lg">
+                            <i class="fas fa-heart text-white"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Item 3 -->
+                <div class="flex flex-col md:flex-row items-center mb-12">
+                    <div class="md:w-1/2 md:pr-8 md:text-right order-2 md:order-1">
+                        <div class="glass p-6 rounded-xl shadow-md hover-lift">
+                            <h3 class="text-xl font-semibold mb-2">Consultante en Administration Publique</h3>
+                            <p class="text-gray-500 text-sm mb-3">2018 - Présent</p>
+                            <p class="text-gray-600">Conseil auprès d'organisations gouvernementales et non gouvernementales sur les questions de gouvernance, de leadership et de réformes administratives.</p>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 flex justify-center items-center order-1 md:order-2 mb-4 md:mb-0">
+                        <div class="w-12 h-12 rounded-full bg-secondary flex items-center justify-center shadow-lg">
+                            <i class="fas fa-landmark text-white"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Item 4 -->
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/2 md:pl-8 order-2">
+                        <div class="glass p-6 rounded-xl shadow-md hover-lift">
+                            <h3 class="text-xl font-semibold mb-2">Conseillère en Développement</h3>
+                            <p class="text-gray-500 text-sm mb-3">2014 - 2018</p>
+                            <p class="text-gray-600">Collaboration avec des organisations internationales sur des projets de développement économique et social, avec un focus sur l'autonomisation des femmes.</p>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 flex justify-center items-center order-1 mb-4 md:mb-0">
+                        <div class="w-12 h-12 rounded-full bg-secondary flex items-center justify-center shadow-lg">
+                            <i class="fas fa-globe text-white"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Skills & Competences Section -->
+<section class="py-16">
+    <div class="container px-4 mx-auto">
+        <div class="text-center mb-10">
+            <p class="text-primary uppercase tracking-widest font-semibold text-sm">Compétences</p>
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Expertises & Savoir-faire</h2>
+            <div class="w-20 h-1 bg-primary mx-auto mb-6"></div>
+            <p class="max-w-2xl mx-auto text-gray-600">
+                Un aperçu des compétences et expertises que j'ai développées au cours de ma carrière.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-10">
+            <div class="glass p-6 rounded-xl shadow-md hover-lift text-center">
+                <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-users text-2xl text-primary"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-3">Leadership</h3>
+                <p class="text-gray-600">
+                    Direction d'équipes, vision stratégique, motivation et développement des collaborateurs, prise de décision.
+                </p>
+            </div>
+            
+            <div class="glass p-6 rounded-xl shadow-md hover-lift text-center">
+                <div class="w-16 h-16 rounded-full bg-secondary/10 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-chart-line text-2xl text-secondary"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-3">Gestion de Projets</h3>
+                <p class="text-gray-600">
+                    Planification stratégique, exécution, suivi et évaluation, gestion des ressources et des parties prenantes.
+                </p>
+            </div>
+            
+            <div class="glass p-6 rounded-xl shadow-md hover-lift text-center">
+                <div class="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-comments text-2xl text-accent"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-3">Communication</h3>
+                <p class="text-gray-600">
+                    Communication interpersonnelle, prise de parole en public, négociation et médiation, rédaction professionnelle.
+                </p>
+            </div>
+            
+            <div class="glass p-6 rounded-xl shadow-md hover-lift text-center">
+                <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-lightbulb text-2xl text-primary"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-3">Entrepreneuriat</h3>
+                <p class="text-gray-600">
+                    Développement commercial, innovation, gestion financière, stratégie d'entreprise, marketing et vente.
+                </p>
+            </div>
+            
+            <div class="glass p-6 rounded-xl shadow-md hover-lift text-center">
+                <div class="w-16 h-16 rounded-full bg-secondary/10 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-balance-scale text-2xl text-secondary"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-3">Administration Publique</h3>
+                <p class="text-gray-600">
+                    Gouvernance, politiques publiques, gestion administrative, relations institutionnelles, service public.
+                </p>
+            </div>
+            
+            <div class="glass p-6 rounded-xl shadow-md hover-lift text-center">
+                <div class="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-hands-helping text-2xl text-accent"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-3">Développement Social</h3>
+                <p class="text-gray-600">
+                    Conception et gestion de programmes sociaux, autonomisation des femmes, formation et mentorat, mobilisation communautaire.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Ambitions Section -->
+<section class="py-16 bg-secondary/10">
+    <div class="container px-4 mx-auto">
+        <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+            <div class="w-full md:w-1/2 order-2 md:order-1" data-aos="fade-right">
+                <h2 class="text-2xl md:text-3xl font-serif text-primary mb-4 md:mb-6">
+                    <i class="fas fa-rocket mr-2"></i> Ambitions & Vision
+                </h2>
+                <p class="text-base md:text-lg mb-4">
+                    Ma vision est de contribuer au développement économique et social de l'Afrique en général, et de la RDC en particulier, à travers l'entrepreneuriat, le leadership féminin et l'engagement communautaire.
+                </p>
+                <div class="space-y-4 mb-6">
+                    <div class="flex items-start glass p-4 rounded-xl shadow-md">
+                        <div class="mr-3 mt-1">
+                            <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center">
+                                <i class="fas fa-check text-white"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-lg mb-1">Développement du Leadership Féminin</h3>
+                            <p class="text-gray-600">Former et mentorer 1000 femmes leaders d'ici 2030 pour augmenter leur participation dans les sphères décisionnelles.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start glass p-4 rounded-xl shadow-md">
+                        <div class="mr-3 mt-1">
+                            <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center">
+                                <i class="fas fa-check text-white"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-lg mb-1">Expansion de l'Impact Social</h3>
+                            <p class="text-gray-600">Étendre les programmes de la Fondation Maboko Ya Elikia à l'ensemble du territoire national et dans la région des Grands Lacs.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start glass p-4 rounded-xl shadow-md">
+                        <div class="mr-3 mt-1">
+                            <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center">
+                                <i class="fas fa-check text-white"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-lg mb-1">Innovation Entrepreneuriale</h3>
+                            <p class="text-gray-600">Développer de nouveaux modèles d'affaires durables et inclusifs pour répondre aux défis socio-économiques de notre société.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full md:w-1/2 order-1 md:order-2" data-aos="fade-left">
+                <img src="<?= asset('images/home/baleniere.jpg') ?>" alt="Future Vision" class="rounded-2xl shadow-lg w-full hover-lift">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Political Ambitions Section -->
+<section class="py-16">
+    <div class="container px-4 mx-auto">
+        <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+            <div class="w-full md:w-1/2" data-aos="fade-right">
+                <img src="<?= asset('images/home/about.png') ?>" alt="Political Vision" class="rounded-2xl shadow-lg w-full hover-lift">
+            </div>
+            <div class="w-full md:w-1/2" data-aos="fade-left">
+                <div class="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4">
+                    <i class="fas fa-landmark mr-1"></i> Engagement Politique
+                </div>
+                <h2 class="text-2xl md:text-3xl font-serif text-primary mb-4 md:mb-6">
+                    Au Service de la Nation
+                </h2>
+                <p class="text-base md:text-lg mb-3 md:mb-4">
+                    Je considère l'engagement politique comme une extension naturelle de mon engagement social et communautaire, une opportunité de servir à plus grande échelle.
+                </p>
+                <p class="text-base md:text-lg mb-5 md:mb-6">
+                    Ma vision politique est fondée sur les principes de bonne gouvernance, d'intégrité, de transparence et d'inclusion, avec un focus particulier sur l'autonomisation des femmes et des jeunes.
+                </p>
+                <div class="grid grid-cols-2 gap-3 md:gap-4 mb-6 md:mb-8">
+                    <div class="glass p-3 md:p-4 rounded-xl shadow-md">
+                        <i class="fas fa-balance-scale text-xl md:text-2xl text-primary mb-1 md:mb-2"></i>
+                        <h3 class="font-semibold">Justice Sociale</h3>
+                        <p class="text-xs md:text-sm">Équité et accès aux opportunités</p>
+                    </div>
+                    <div class="glass p-3 md:p-4 rounded-xl shadow-md">
+                        <i class="fas fa-hand-holding-heart text-xl md:text-2xl text-primary mb-1 md:mb-2"></i>
+                        <h3 class="font-semibold">Politique Inclusive</h3>
+                        <p class="text-xs md:text-sm">Représentation de tous les citoyens</p>
+                    </div>
+                    <div class="glass p-3 md:p-4 rounded-xl shadow-md">
+                        <i class="fas fa-seedling text-xl md:text-2xl text-primary mb-1 md:mb-2"></i>
+                        <h3 class="font-semibold">Développement Durable</h3>
+                        <p class="text-xs md:text-sm">Économie et environnement</p>
+                    </div>
+                    <div class="glass p-3 md:p-4 rounded-xl shadow-md">
+                        <i class="fas fa-users text-xl md:text-2xl text-primary mb-1 md:mb-2"></i>
+                        <h3 class="font-semibold">Leadership Éthique</h3>
+                        <p class="text-xs md:text-sm">Intégrité et responsabilité</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-12 bg-secondary text-white relative overflow-hidden">
+    <div class="absolute inset-0 bg-cover bg-center opacity-10" style="background-image: url('<?= asset('images/home/baleniere.jpg') ?>');"></div>
+    <div class="container mx-auto px-4 text-center relative">
+        <h2 class="text-2xl md:text-3xl font-serif mb-4">
+            <i class="fas fa-handshake mr-2"></i> Ensemble pour l'Avenir
+        </h2>
+        <p class="text-base md:text-lg max-w-3xl mx-auto mb-6">
+            Intéressé par mon parcours ou mes ambitions? Souhaitez-vous collaborer sur des projets d'impact? 
+            Contactez-moi pour discuter des opportunités de partenariat et d'échange.
+        </p>
+        <div class="flex flex-wrap justify-center gap-3">
+            <a href="<?= url('contact') ?>" class="bg-white text-secondary px-6 py-3 rounded-full hover:bg-opacity-90 transition-colors">
+                <i class="fas fa-envelope mr-2"></i> Me Contacter
+            </a>
+            <a href="<?= url('blog') ?>" class="bg-transparent border-2 border-white text-white px-6 py-3 rounded-full hover:bg-white hover:text-secondary transition-colors">
+                <i class="fas fa-book-reader mr-2"></i> Lire Mes Articles
+            </a>
+        </div>
+    </div>
+</section>

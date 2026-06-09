@@ -1,0 +1,493 @@
+﻿<?php $extra_css = <<<'HTML_BLOCK'
+<style>
+    .gallery-container {
+        transition: all 0.3s ease;
+    }
+    
+    .gallery-item {
+        overflow: hidden;
+        transition: transform 0.5s ease;
+        cursor: pointer;
+    }
+    
+    .gallery-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .gallery-item img {
+        transition: all 0.5s ease;
+    }
+    
+    .gallery-item:hover img {
+        transform: scale(1.03);
+    }
+    
+    .gallery-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+        padding: 30px 20px 20px;
+        color: white;
+        transform: translateY(100%);
+        transition: transform 0.3s ease;
+    }
+    
+    .gallery-item:hover .gallery-overlay {
+        transform: translateY(0);
+    }
+    
+    /* Lightbox styles */
+    .lightbox {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+    
+    .lightbox.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+    
+    .lightbox-content {
+        max-width: 90%;
+        max-height: 80vh;
+        position: relative;
+    }
+    
+    .lightbox-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        color: white;
+        font-size: 2rem;
+        cursor: pointer;
+        z-index: 1010;
+    }
+    
+    .category-filter {
+        transition: all 0.3s;
+        position: relative;
+    }
+    
+    .category-filter.active {
+        background-image: linear-gradient(135deg, #0063C9, #23a2f7, #4BB4FF);
+        color: white;
+    }
+    
+    /* Animation pour les éléments qui apparaissent */
+    .fade-in {
+        animation: fadeIn 0.6s ease forwards;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* CSS pour la vidéo embed responsive */
+    .video-container {
+        position: relative;
+        padding-bottom: 56.25%;
+        height: 0;
+        overflow: hidden;
+    }
+    
+    .video-container iframe,
+    .video-container video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    
+    /* Effet pour les catégories */
+    .category-pill {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        z-index: 10;
+        background-image: linear-gradient(135deg, #0063C9, #23a2f7);
+        color: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+</style>
+HTML_BLOCK; ?>
+
+<!-- Hero Section -->
+<section class="relative pt-24 pb-16 md:pb-24 bg-gradient-to-r from-blue-900 to-blue-700 text-white">
+    <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-900 to-blue-700 opacity-70"></div>
+        <img src="<?= asset('images/jesii.png') ?>" alt="Background" class="absolute w-full h-full object-cover opacity-20">
+        
+        <!-- Formes décoratives -->
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden">
+            <div class="absolute top-10 left-10 w-20 h-20 rounded-full bg-white opacity-5"></div>
+            <div class="absolute bottom-10 right-10 w-32 h-32 rounded-full bg-white opacity-5"></div>
+            <div class="absolute top-1/4 right-1/4 w-16 h-16 rounded-full bg-white opacity-5"></div>
+        </div>
+    </div>
+    
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="text-center max-w-3xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 animate-text-1">Galerie</h1>
+            <p class="text-xl md:text-2xl opacity-90 mb-8 animate-text-2">Découvrez les moments forts de mes activités à travers cette collection d'images et vidéos</p>
+        </div>
+    </div>
+</section>
+
+<!-- Filter Section -->
+<section class="py-8 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-wrap justify-center gap-3">
+            <button class="category-filter active px-4 py-2 rounded-full text-sm font-medium shadow-sm transition-all" data-category="all">
+                Tous
+            </button>
+            <button class="category-filter px-4 py-2 rounded-full text-sm font-medium shadow-sm transition-all bg-white" data-category="foundation">
+                Fondation
+            </button>
+            <button class="category-filter px-4 py-2 rounded-full text-sm font-medium shadow-sm transition-all bg-white" data-category="consulting">
+                Consulting
+            </button>
+            <button class="category-filter px-4 py-2 rounded-full text-sm font-medium shadow-sm transition-all bg-white" data-category="events">
+                Événements
+            </button>
+            <button class="category-filter px-4 py-2 rounded-full text-sm font-medium shadow-sm transition-all bg-white" data-category="personal">
+                Personnel
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Gallery Grid -->
+<section class="py-12">
+    <div class="container mx-auto px-4">
+        <!-- Section Fondation -->
+        <?php if ($foundation_items): ?>
+        <div class="mb-10">
+            <h2 class="text-3xl font-bold text-center mb-3 text-gradient">Fondation</h2>
+            <div class="w-20 h-1 bg-gradient-to-r from-blue-500 to-blue-300 mx-auto mb-8"></div>
+            
+            <div class="gallery-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+                <?php $__loop_items = $foundation_items; foreach ($foundation_items as $item): ?>
+                <div class="gallery-item rounded-lg overflow-hidden shadow-md bg-white relative fade-in" data-category="<?= e($item->category) ?>">
+                    <span class="category-pill"><?= e($item->getCategoryDisplay()) ?></span>
+                    <div class="aspect-w-4 aspect-h-3">
+                        <?php if ($item->is_video): ?>
+                        <div class="video-container">
+                            <?php if (str_contains((string) ($item->video_url ?? ''), 'youtube')): ?>
+                                <iframe src="<?= $item->video_url ?>" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            <?php elseif (str_contains((string) ($item->video_url ?? ''), 'vimeo')): ?>
+                                <iframe src="<?= $item->video_url ?>" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                            <?php else: ?>
+                                <video controls>
+                                    <source src="<?= e($item->video_url) ?>" type="video/mp4">
+                                    Votre navigateur ne supporte pas la lecture de vidéos.
+                                </video>
+                            <?php endif; ?>
+                        </div>
+                        <?php else: ?>
+                        <?php if ($item->image): ?>
+                        <img src="<?= e(media_url($item->image ?? '')) ?>" alt="<?= e($item->title) ?>" class="w-full h-full object-cover">
+                        <?php else: ?>
+                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                            <i class="fas fa-image text-gray-400 text-4xl"></i>
+                        </div>
+                        <?php endif; ?>
+                        <?php endif; ?>
+                    </div>
+                    <div class="gallery-overlay">
+                        <h3 class="text-lg font-bold"><?= e($item->title) ?></h3>
+                        <?php if ($item->description): ?>
+                        <p class="text-sm text-gray-200 mt-1"><?= e($item->description) ?></p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php endif; ?>
+        
+        <!-- Section Consulting -->
+        <?php if ($consulting_items): ?>
+        <div class="mb-10">
+            <h2 class="text-3xl font-bold text-center mb-3 text-gradient">Consulting</h2>
+            <div class="w-20 h-1 bg-gradient-to-r from-blue-500 to-blue-300 mx-auto mb-8"></div>
+            
+            <div class="gallery-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+                <?php $__loop_items = $consulting_items; foreach ($consulting_items as $item): ?>
+                <div class="gallery-item rounded-lg overflow-hidden shadow-md bg-white relative fade-in" data-category="<?= e($item->category) ?>">
+                    <span class="category-pill"><?= e($item->getCategoryDisplay()) ?></span>
+                    <div class="aspect-w-4 aspect-h-3">
+                        <?php if ($item->is_video): ?>
+                        <div class="video-container">
+                            <?php if (str_contains((string) ($item->video_url ?? ''), 'youtube')): ?>
+                                <iframe src="<?= $item->video_url ?>" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            <?php elseif (str_contains((string) ($item->video_url ?? ''), 'vimeo')): ?>
+                                <iframe src="<?= $item->video_url ?>" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                            <?php else: ?>
+                                <video controls>
+                                    <source src="<?= e($item->video_url) ?>" type="video/mp4">
+                                    Votre navigateur ne supporte pas la lecture de vidéos.
+                                </video>
+                            <?php endif; ?>
+                        </div>
+                        <?php else: ?>
+                        <?php if ($item->image): ?>
+                        <img src="<?= e(media_url($item->image ?? '')) ?>" alt="<?= e($item->title) ?>" class="w-full h-full object-cover">
+                        <?php else: ?>
+                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                            <i class="fas fa-image text-gray-400 text-4xl"></i>
+                        </div>
+                        <?php endif; ?>
+                        <?php endif; ?>
+                    </div>
+                    <div class="gallery-overlay">
+                        <h3 class="text-lg font-bold"><?= e($item->title) ?></h3>
+                        <?php if ($item->description): ?>
+                        <p class="text-sm text-gray-200 mt-1"><?= e($item->description) ?></p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php endif; ?>
+        
+        <!-- Section Événements -->
+        <?php if ($events_items): ?>
+        <div class="mb-10">
+            <h2 class="text-3xl font-bold text-center mb-3 text-gradient">Événements</h2>
+            <div class="w-20 h-1 bg-gradient-to-r from-blue-500 to-blue-300 mx-auto mb-8"></div>
+            
+            <div class="gallery-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+                <?php $__loop_items = $events_items; foreach ($events_items as $item): ?>
+                <div class="gallery-item rounded-lg overflow-hidden shadow-md bg-white relative fade-in" data-category="<?= e($item->category) ?>">
+                    <span class="category-pill"><?= e($item->getCategoryDisplay()) ?></span>
+                    <div class="aspect-w-4 aspect-h-3">
+                        <?php if ($item->is_video): ?>
+                        <div class="video-container">
+                            <?php if (str_contains((string) ($item->video_url ?? ''), 'youtube')): ?>
+                                <iframe src="<?= $item->video_url ?>" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            <?php elseif (str_contains((string) ($item->video_url ?? ''), 'vimeo')): ?>
+                                <iframe src="<?= $item->video_url ?>" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                            <?php else: ?>
+                                <video controls>
+                                    <source src="<?= e($item->video_url) ?>" type="video/mp4">
+                                    Votre navigateur ne supporte pas la lecture de vidéos.
+                                </video>
+                            <?php endif; ?>
+                        </div>
+                        <?php else: ?>
+                        <?php if ($item->image): ?>
+                        <img src="<?= e(media_url($item->image ?? '')) ?>" alt="<?= e($item->title) ?>" class="w-full h-full object-cover">
+                        <?php else: ?>
+                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                            <i class="fas fa-image text-gray-400 text-4xl"></i>
+                        </div>
+                        <?php endif; ?>
+                        <?php endif; ?>
+                    </div>
+                    <div class="gallery-overlay">
+                        <h3 class="text-lg font-bold"><?= e($item->title) ?></h3>
+                        <?php if ($item->description): ?>
+                        <p class="text-sm text-gray-200 mt-1"><?= e($item->description) ?></p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php endif; ?>
+        
+        <!-- Section Personnel -->
+        <?php if ($personal_items): ?>
+        <div class="mb-10">
+            <h2 class="text-3xl font-bold text-center mb-3 text-gradient">Personnel</h2>
+            <div class="w-20 h-1 bg-gradient-to-r from-blue-500 to-blue-300 mx-auto mb-8"></div>
+            
+            <div class="gallery-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+                <?php $__loop_items = $personal_items; foreach ($personal_items as $item): ?>
+                <div class="gallery-item rounded-lg overflow-hidden shadow-md bg-white relative fade-in" data-category="<?= e($item->category) ?>">
+                    <span class="category-pill"><?= e($item->getCategoryDisplay()) ?></span>
+                    <div class="aspect-w-4 aspect-h-3">
+                        <?php if ($item->is_video): ?>
+                        <div class="video-container">
+                            <?php if (str_contains((string) ($item->video_url ?? ''), 'youtube')): ?>
+                                <iframe src="<?= $item->video_url ?>" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            <?php elseif (str_contains((string) ($item->video_url ?? ''), 'vimeo')): ?>
+                                <iframe src="<?= $item->video_url ?>" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                            <?php else: ?>
+                                <video controls>
+                                    <source src="<?= e($item->video_url) ?>" type="video/mp4">
+                                    Votre navigateur ne supporte pas la lecture de vidéos.
+                                </video>
+                            <?php endif; ?>
+                        </div>
+                        <?php else: ?>
+                        <?php if ($item->image): ?>
+                        <img src="<?= e(media_url($item->image ?? '')) ?>" alt="<?= e($item->title) ?>" class="w-full h-full object-cover">
+                        <?php else: ?>
+                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                            <i class="fas fa-image text-gray-400 text-4xl"></i>
+                        </div>
+                        <?php endif; ?>
+                        <?php endif; ?>
+                    </div>
+                    <div class="gallery-overlay">
+                        <h3 class="text-lg font-bold"><?= e($item->title) ?></h3>
+                        <?php if ($item->description): ?>
+                        <p class="text-sm text-gray-200 mt-1"><?= e($item->description) ?></p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php endif; ?>
+        
+        <!-- Message affiché si aucune photo n'est disponible -->
+        <?php if (!$foundation_items && !$consulting_items && !$events_items && !$personal_items): ?>
+        <div class="col-span-full text-center py-8">
+            <i class="fas fa-images text-4xl text-gray-300 mb-4"></i>
+            <p class="text-gray-500">Aucune photo disponible pour le moment</p>
+        </div>
+        <?php endif; ?>
+    </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="gallery-lightbox">
+    <div class="lightbox-close">
+        <i class="fas fa-times"></i>
+    </div>
+    <div class="lightbox-content">
+        <img src="" alt="" id="lightbox-image">
+    </div>
+</div>
+<?php $extra_js = <<<'HTML_BLOCK'
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Filtrage par catégorie
+        const filterButtons = document.querySelectorAll('.category-filter');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Mise à jour des boutons
+                filterButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    btn.classList.add('bg-white');
+                });
+                this.classList.add('active');
+                this.classList.remove('bg-white');
+                
+                // Filtrage des éléments
+                const category = this.getAttribute('data-category');
+                
+                // Afficher ou masquer sections entières selon la catégorie sélectionnée
+                const sections = document.querySelectorAll('.mb-10');
+                
+                if (category === 'all') {
+                    // Afficher toutes les sections
+                    sections.forEach(section => {
+                        section.style.display = 'block';
+                    });
+                    
+                    // Afficher tous les éléments
+                    galleryItems.forEach(item => {
+                        item.style.display = 'block';
+                        setTimeout(() => {
+                            item.classList.add('fade-in');
+                        }, 50);
+                    });
+                } else {
+                    // Pour chaque section, ne montrer que les items de la catégorie sélectionnée
+                    sections.forEach(section => {
+                        const sectionItems = section.querySelectorAll('.gallery-item');
+                        const hasMatchingItems = Array.from(sectionItems).some(
+                            item => item.getAttribute('data-category') === category
+                        );
+                        
+                        section.style.display = hasMatchingItems ? 'block' : 'none';
+                    });
+                    
+                    // Filtrer les éléments par catégorie
+                    galleryItems.forEach(item => {
+                        if (item.getAttribute('data-category') === category) {
+                            item.style.display = 'block';
+                            setTimeout(() => {
+                                item.classList.add('fade-in');
+                            }, 50);
+                        } else {
+                            item.style.display = 'none';
+                            item.classList.remove('fade-in');
+                        }
+                    });
+                }
+            });
+        });
+        
+        // Lightbox pour les images
+        const lightbox = document.getElementById('gallery-lightbox');
+        const lightboxImage = document.getElementById('lightbox-image');
+        const lightboxClose = document.querySelector('.lightbox-close');
+        
+        // Ouvrir le lightbox en cliquant sur les images (sauf les vidéos)
+        galleryItems.forEach(item => {
+            if (!item.querySelector('.video-container')) {
+                item.addEventListener('click', function() {
+                    const imgSrc = this.querySelector('img').getAttribute('src');
+                    const imgAlt = this.querySelector('img').getAttribute('alt');
+                    
+                    lightboxImage.setAttribute('src', imgSrc);
+                    lightboxImage.setAttribute('alt', imgAlt);
+                    lightbox.classList.add('active');
+                    
+                    // Bloquer le scroll du body
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+        });
+        
+        // Fermer le lightbox
+        lightboxClose.addEventListener('click', function() {
+            lightbox.classList.remove('active');
+            // Réactiver le scroll
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Fermer le lightbox en cliquant en dehors de l'image
+        lightbox.addEventListener('click', function(e) {
+            if (e.target === lightbox) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Animation d'entrée pour les éléments de la galerie
+        galleryItems.forEach((item, index) => {
+            setTimeout(() => {
+                item.classList.add('fade-in');
+            }, 100 * index);
+        });
+    });
+</script>
+HTML_BLOCK; ?>

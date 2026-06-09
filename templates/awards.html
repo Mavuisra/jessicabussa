@@ -1,0 +1,459 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Jessica Bussa - Prix et Distinctions{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative bg-gradient-to-r from-accent to-primary text-white py-16">
+    <div class="absolute inset-0 bg-cover bg-center opacity-20" style="background-image: url('{% static 'images/home/baleniere.jpg' %}');"></div>
+    <div class="container mx-auto px-4 relative">
+        <div class="max-w-3xl">
+            <h1 class="text-4xl font-bold mb-4">Prix et Distinctions</h1>
+            <p class="text-xl mb-6">Reconnaissance de mon engagement envers l'excellence et l'impact social.</p>
+            <div class="flex flex-wrap gap-3">
+                {% if awards %}
+                    {% for award in awards %}
+                        <a href="#award-{{ award.id }}" class="bg-white text-primary hover:bg-gray-100 px-6 py-3 rounded-full transition duration-300">
+                            <i class="fas fa-trophy mr-2"></i> {{ award.title }}
+                        </a>
+                    {% endfor %}
+                {% else %}
+                    <a href="#mosala" class="bg-white text-primary hover:bg-gray-100 px-6 py-3 rounded-full transition duration-300">
+                        <i class="fas fa-trophy mr-2"></i> Mosala Awards
+                    </a>
+                {% endif %}
+                <a href="{% url 'portefolio:contact' %}" class="bg-transparent border-2 border-white hover:bg-white hover:text-primary px-6 py-3 rounded-full transition duration-300">
+                    <i class="fas fa-envelope mr-2"></i> Contact
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Awards Sections -->
+{% if awards %}
+    {% for award in awards %}
+        <section id="award-{{ award.id }}" class="py-20 {% cycle 'bg-white' 'bg-gray-50' %}">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col lg:flex-row items-center gap-12">
+                    <div class="w-full lg:w-1/2" data-aos="fade-right">
+                        {% if award.image %}
+                            <div class="rounded-2xl shadow-2xl overflow-hidden transform hover:scale-105 transition-all duration-500">
+                                <img src="{{ award.image.url }}" alt="{{ award.title }}" class="w-full hover-lift">
+                            </div>
+                        {% else %}
+                            <div class="bg-gradient-to-br from-primary to-accent h-80 rounded-2xl shadow-2xl flex items-center justify-center transform hover:scale-105 transition-all duration-500">
+                                <i class="fas fa-award text-7xl text-white"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="w-full lg:w-1/2" data-aos="fade-left">
+                        <div class="inline-block px-4 py-2 rounded-full bg-accent/10 text-accent text-sm font-semibold mb-6">
+                            <i class="fas fa-star mr-1"></i> Distinction d'Excellence
+                        </div>
+                        <h2 class="text-3xl md:text-4xl font-serif text-primary mb-6">
+                            {{ award.title }}
+                        </h2>
+                        <p class="text-lg mb-6 text-gray-700 leading-relaxed">
+                            {{ award.description }}
+                        </p>
+                        <div class="grid grid-cols-2 gap-4 mb-8">
+                            <div class="glass p-5 rounded-xl shadow-lg hover:shadow-xl transition duration-300">
+                                <i class="fas fa-trophy text-2xl text-accent mb-3"></i>
+                                <h3 class="font-semibold text-lg">Organisation</h3>
+                                <p class="text-gray-700">{{ award.organization }}</p>
+                            </div>
+                            <div class="glass p-5 rounded-xl shadow-lg hover:shadow-xl transition duration-300">
+                                <i class="fas fa-calendar-alt text-2xl text-accent mb-3"></i>
+                                <h3 class="font-semibold text-lg">Année</h3>
+                                <p class="text-gray-700">{{ award.date|date:"Y" }}</p>
+                            </div>
+                        </div>
+                        <blockquote class="text-gray-700 italic border-l-4 border-accent pl-4 py-2">
+                            "Cette reconnaissance m'encourage à continuer le travail d'autonomisation des femmes et des jeunes, pour un avenir meilleur et plus équitable pour tous."
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endfor %}
+{% else %}
+<!-- Mosala Awards Section (Default if no awards in database) -->
+<section id="mosala" class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col lg:flex-row items-center gap-12">
+            <div class="w-full lg:w-1/2" data-aos="fade-right">
+                <div class="rounded-2xl shadow-2xl overflow-hidden transform hover:scale-105 transition-all duration-500">
+                    <img src="{% static 'images/home/baleniere.jpg' %}" alt="Mosala Awards" class="w-full">
+                </div>
+            </div>
+            <div class="w-full lg:w-1/2" data-aos="fade-left">
+                <div class="inline-block px-4 py-2 rounded-full bg-accent/10 text-accent text-sm font-semibold mb-6">
+                    <i class="fas fa-star mr-1"></i> Distinction d'Excellence
+                </div>
+                <h2 class="text-3xl md:text-4xl font-serif text-primary mb-6">
+                    Lauréate des Mosala Awards
+                </h2>
+                <p class="text-lg mb-5 text-gray-700 leading-relaxed">
+                    J'ai eu l'honneur d'être reconnue par les prestigieux Mosala Awards, qui célèbrent l'excellence, l'innovation et l'impact social dans la communauté congolaise et africaine.
+                </p>
+                <p class="text-lg mb-6 text-gray-700 leading-relaxed">
+                    Cette distinction, reçue en 2022, souligne mon engagement envers l'autonomisation des femmes, l'entrepreneuriat social et le leadership transformationnel en Afrique.
+                </p>
+                <div class="grid grid-cols-2 gap-4 mb-8">
+                    <div class="glass p-5 rounded-xl shadow-lg hover:shadow-xl transition duration-300">
+                        <i class="fas fa-trophy text-2xl text-accent mb-3"></i>
+                        <h3 class="font-semibold text-lg">Catégorie</h3>
+                        <p class="text-gray-700">Leadership & Impact Social</p>
+                    </div>
+                    <div class="glass p-5 rounded-xl shadow-lg hover:shadow-xl transition duration-300">
+                        <i class="fas fa-calendar-alt text-2xl text-accent mb-3"></i>
+                        <h3 class="font-semibold text-lg">Année</h3>
+                        <p class="text-gray-700">2022</p>
+                    </div>
+                    <div class="glass p-5 rounded-xl shadow-lg hover:shadow-xl transition duration-300">
+                        <i class="fas fa-map-marker-alt text-2xl text-accent mb-3"></i>
+                        <h3 class="font-semibold text-lg">Lieu</h3>
+                        <p class="text-gray-700">Kinshasa, RDC</p>
+                    </div>
+                    <div class="glass p-5 rounded-xl shadow-lg hover:shadow-xl transition duration-300">
+                        <i class="fas fa-users text-2xl text-accent mb-3"></i>
+                        <h3 class="font-semibold text-lg">Organisation</h3>
+                        <p class="text-gray-700">Mosala Foundation</p>
+                    </div>
+                </div>
+                <blockquote class="text-gray-700 italic border-l-4 border-accent pl-4 py-2">
+                    "Cette reconnaissance m'encourage à continuer le travail d'autonomisation des femmes et des jeunes, pour un avenir meilleur et plus équitable pour tous."
+                </blockquote>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Awards Timeline -->
+<section class="py-20 bg-gray-50">
+    <div class="container px-4 mx-auto">
+        <div class="text-center mb-12">
+            <p class="text-primary uppercase tracking-widest font-semibold text-sm">Excellence Académique</p>
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Mes Distinctions Universitaires</h2>
+            <div class="w-24 h-1 bg-primary mx-auto mb-6"></div>
+            <p class="max-w-2xl mx-auto text-gray-600 text-lg">
+                Un parcours d'excellence académique avec des résultats constamment distingués et des reconnaissances prestigieuses.
+            </p>
+        </div>
+
+        <div class="relative max-w-5xl mx-auto">
+            <!-- Line down the middle for timeline -->
+            <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-accent/30 z-0"></div>
+            
+            <!-- Awards -->
+            <div class="space-y-12">
+                <!-- Mosala Award -->
+                <div class="relative z-10">
+                    <div class="hidden md:flex absolute left-1/2 top-0 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-accent text-white items-center justify-center shadow-lg">
+                        2022
+                    </div>
+                    <div class="md:w-5/12 md:ml-auto glass p-6 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:transform hover:scale-105">
+                        <div class="flex flex-col gap-4">
+                            <div class="w-full bg-gradient-to-br from-primary to-accent h-48 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-trophy text-5xl text-white"></i>
+                            </div>
+                            <div class="w-full">
+                                <div class="flex items-center mb-3">
+                                    <h3 class="text-2xl font-semibold text-primary">Mosala Award - Leadership & Impact Social</h3>
+                                    <span class="md:hidden ml-auto text-sm font-bold bg-accent text-white px-3 py-1 rounded-full">2022</span>
+                                </div>
+                                <p class="text-gray-500 text-sm mb-3">Mosala Foundation • Kinshasa, RDC</p>
+                                <p class="text-gray-700">Reconnaissance pour l'excellence en leadership et l'impact social à travers la Fondation Maboko Ya Elikia et les initiatives d'autonomisation des femmes.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Distinction Doctorat -->
+                <div class="relative z-10">
+                    <div class="hidden md:flex absolute left-1/2 top-0 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-accent text-white items-center justify-center shadow-lg">
+                        2020
+                    </div>
+                    <div class="md:w-5/12 md:mr-auto md:pr-12 glass p-6 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:transform hover:scale-105">
+                        <div class="flex flex-col gap-4">
+                            <div class="w-full bg-gradient-to-br from-purple-500 to-indigo-600 h-48 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-graduation-cap text-5xl text-white"></i>
+                            </div>
+                            <div class="w-full">
+                                <div class="flex items-center mb-3">
+                                    <h3 class="text-2xl font-semibold text-primary">Doctorat avec Distinction</h3>
+                                    <span class="md:hidden ml-auto text-sm font-bold bg-purple-500 text-white px-3 py-1 rounded-full">2020</span>
+                                </div>
+                                <p class="text-gray-500 text-sm mb-3">Université de Californie • États-Unis</p>
+                                <p class="text-gray-700">Obtention du doctorat en Sciences Économiques avec distinction, une reconnaissance rare attribuée pour l'excellence et l'innovation de la recherche.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Bourse Fulbright -->
+                <div class="relative z-10">
+                    <div class="hidden md:flex absolute left-1/2 top-0 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-accent text-white items-center justify-center shadow-lg">
+                        2016
+                    </div>
+                    <div class="md:w-5/12 md:ml-auto glass p-6 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:transform hover:scale-105">
+                        <div class="flex flex-col gap-4">
+                            <div class="w-full bg-gradient-to-br from-green-500 to-emerald-500 h-48 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-university text-5xl text-white"></i>
+                            </div>
+                            <div class="w-full">
+                                <div class="flex items-center mb-3">
+                                    <h3 class="text-2xl font-semibold text-primary">Bourse d'Excellence Fulbright</h3>
+                                    <span class="md:hidden ml-auto text-sm font-bold bg-green-500 text-white px-3 py-1 rounded-full">2016</span>
+                                </div>
+                                <p class="text-gray-500 text-sm mb-3">Programme Fulbright • États-Unis</p>
+                                <p class="text-gray-700">Bourse d'études prestigieuse pour poursuivre des études doctorales aux États-Unis, attribuée sur la base de l'excellence académique et du leadership.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Prix du Meilleur Mémoire -->
+                <div class="relative z-10">
+                    <div class="hidden md:flex absolute left-1/2 top-0 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-accent text-white items-center justify-center shadow-lg">
+                        2015
+                    </div>
+                    <div class="md:w-5/12 md:mr-auto md:pr-12 glass p-6 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:transform hover:scale-105">
+                        <div class="flex flex-col gap-4">
+                            <div class="w-full bg-gradient-to-br from-indigo-500 to-blue-500 h-48 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-book text-5xl text-white"></i>
+                            </div>
+                            <div class="w-full">
+                                <div class="flex items-center mb-3">
+                                    <h3 class="text-2xl font-semibold text-primary">Prix du Meilleur Mémoire</h3>
+                                    <span class="md:hidden ml-auto text-sm font-bold bg-indigo-500 text-white px-3 py-1 rounded-full">2015</span>
+                                </div>
+                                <p class="text-gray-500 text-sm mb-3">Université de Kinshasa • RDC</p>
+                                <p class="text-gray-700">Distinction pour le meilleur mémoire de Master portant sur l'entrepreneuriat féminin et son impact sur le développement économique en République Démocratique du Congo.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Master avec Distinction -->
+                <div class="relative z-10">
+                    <div class="hidden md:flex absolute left-1/2 top-0 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-accent text-white items-center justify-center shadow-lg">
+                        2014
+                    </div>
+                    <div class="md:w-5/12 md:ml-auto glass p-6 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:transform hover:scale-105">
+                        <div class="flex flex-col gap-4">
+                            <div class="w-full bg-gradient-to-br from-blue-500 to-teal-500 h-48 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-award text-5xl text-white"></i>
+                            </div>
+                            <div class="w-full">
+                                <div class="flex items-center mb-3">
+                                    <h3 class="text-2xl font-semibold text-primary">Master avec Grande Distinction</h3>
+                                    <span class="md:hidden ml-auto text-sm font-bold bg-blue-500 text-white px-3 py-1 rounded-full">2014</span>
+                                </div>
+                                <p class="text-gray-500 text-sm mb-3">Université de Kinshasa • RDC</p>
+                                <p class="text-gray-700">Obtention du diplôme de Master en Sciences Économiques et de Gestion avec la mention "Grande Distinction", classée première de sa promotion.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Major de Promotion Licence -->
+                <div class="relative z-10">
+                    <div class="hidden md:flex absolute left-1/2 top-0 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-accent text-white items-center justify-center shadow-lg">
+                        2012
+                    </div>
+                    <div class="md:w-5/12 md:mr-auto md:pr-12 glass p-6 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:transform hover:scale-105">
+                        <div class="flex flex-col gap-4">
+                            <div class="w-full bg-gradient-to-br from-amber-500 to-orange-500 h-48 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-star text-5xl text-white"></i>
+                            </div>
+                            <div class="w-full">
+                                <div class="flex items-center mb-3">
+                                    <h3 class="text-2xl font-semibold text-primary">Licence avec Distinction</h3>
+                                    <span class="md:hidden ml-auto text-sm font-bold bg-amber-500 text-white px-3 py-1 rounded-full">2012</span>
+                                </div>
+                                <p class="text-gray-500 text-sm mb-3">Faculté des Sciences Économiques • Université de Kinshasa</p>
+                                <p class="text-gray-700">Obtention de la licence avec mention "Distinction" et titre de major de promotion en Sciences Économiques et de Gestion, option Management des Organisations.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Distinction Graduat -->
+                <div class="relative z-10">
+                    <div class="hidden md:flex absolute left-1/2 top-0 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-accent text-white items-center justify-center shadow-lg">
+                        2009
+                    </div>
+                    <div class="md:w-5/12 md:ml-auto glass p-6 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:transform hover:scale-105">
+                        <div class="flex flex-col gap-4">
+                            <div class="w-full bg-gradient-to-br from-red-500 to-pink-500 h-48 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-medal text-5xl text-white"></i>
+                            </div>
+                            <div class="w-full">
+                                <div class="flex items-center mb-3">
+                                    <h3 class="text-2xl font-semibold text-primary">Graduat avec Distinction</h3>
+                                    <span class="md:hidden ml-auto text-sm font-bold bg-red-500 text-white px-3 py-1 rounded-full">2009</span>
+                                </div>
+                                <p class="text-gray-500 text-sm mb-3">Université de Kinshasa • RDC</p>
+                                <p class="text-gray-700">Obtention du diplôme de Graduat avec mention "Distinction", figurant parmi les cinq meilleurs étudiants de sa promotion.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Gallery Section -->
+<section class="py-20 bg-white">
+    <div class="container px-4 mx-auto">
+        <div class="text-center mb-12">
+            <p class="text-primary uppercase tracking-widest font-semibold text-sm">Moments de Reconnaissance</p>
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Galerie des Prix</h2>
+            <div class="w-24 h-1 bg-primary mx-auto mb-6"></div>
+            <p class="max-w-2xl mx-auto text-gray-600 text-lg">
+                Quelques moments mémorables de cérémonies de remise de prix et de reconnaissance.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {% for item in awards_gallery %}
+            <div class="rounded-xl overflow-hidden shadow-xl hover-lift transition-all duration-500 hover:scale-105 group">
+                {% if item.is_video %}
+                <div class="aspect-w-16 aspect-h-9">
+                    <iframe src="{{ item.video_url }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="p-4 bg-white">
+                    <p class="text-gray-700 font-medium">{{ item.title }}</p>
+                </div>
+                {% else %}
+                <div class="overflow-hidden">
+                    <img src="{{ item.image.url }}" alt="{{ item.title }}" class="w-full h-56 object-cover transform transition duration-700 group-hover:scale-110">
+                </div>
+                <div class="p-4 bg-white">
+                    <p class="text-gray-700 font-medium">{{ item.title }}</p>
+                </div>
+                {% endif %}
+            </div>
+            {% empty %}
+            <div class="col-span-full">
+                <div class="text-center py-10">
+                    <p class="text-gray-500 mb-8 text-lg">Galerie en cours de mise à jour.</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-20 bg-gray-50">
+    <div class="container px-4 mx-auto">
+        <div class="text-center mb-12">
+            <p class="text-primary uppercase tracking-widest font-semibold text-sm">Témoignages</p>
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Ce Qu'ils Disent</h2>
+            <div class="w-24 h-1 bg-primary mx-auto mb-6"></div>
+            <p class="max-w-2xl mx-auto text-gray-600 text-lg">
+                Témoignages de personnes qui ont reconnu mon travail et mon impact.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Testimonial 1 -->
+            <div class="glass p-8 rounded-xl shadow-xl hover:shadow-2xl hover:transform hover:scale-105 transition-all duration-300">
+                <div class="flex items-center mb-6">
+                    <div class="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mr-4 shadow-md">
+                        <i class="fas fa-user text-2xl text-primary"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-lg">Dr. Jean Mukenge</h4>
+                        <p class="text-sm text-gray-500">Président, Mosala Foundation</p>
+                    </div>
+                </div>
+                <p class="text-gray-700 italic leading-relaxed">
+                    "Jessica Bussa incarne l'excellence et le dévouement dans tout ce qu'elle entreprend. Son impact sur les communautés à travers sa fondation est extraordinaire et inspirant."
+                </p>
+                <div class="mt-4 text-accent">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            
+            <!-- Testimonial 2 -->
+            <div class="glass p-8 rounded-xl shadow-xl hover:shadow-2xl hover:transform hover:scale-105 transition-all duration-300">
+                <div class="flex items-center mb-6">
+                    <div class="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mr-4 shadow-md">
+                        <i class="fas fa-user text-2xl text-primary"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-lg">Hon. Marie Nzeza</h4>
+                        <p class="text-sm text-gray-500">Ancienne Ministre, RDC</p>
+                    </div>
+                </div>
+                <p class="text-gray-700 italic leading-relaxed">
+                    "Son leadership exemplaire et son engagement envers l'autonomisation des femmes font de Jessica une force positive pour le changement en RDC et au-delà."
+                </p>
+                <div class="mt-4 text-accent">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            
+            <!-- Testimonial 3 -->
+            <div class="glass p-8 rounded-xl shadow-xl hover:shadow-2xl hover:transform hover:scale-105 transition-all duration-300">
+                <div class="flex items-center mb-6">
+                    <div class="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mr-4 shadow-md">
+                        <i class="fas fa-user text-2xl text-primary"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-lg">Prof. Robert Kamba</h4>
+                        <p class="text-sm text-gray-500">Directeur académique, Université de Kinshasa</p>
+                    </div>
+                </div>
+                <p class="text-gray-700 italic leading-relaxed">
+                    "La recherche et le travail académique de Jessica sur le leadership féminin représentent une contribution significative au domaine, avec des implications pratiques importantes."
+                </p>
+                <div class="mt-4 text-accent">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-16 bg-accent text-white relative overflow-hidden">
+    <div class="absolute inset-0 bg-cover bg-center opacity-10" style="background-image: url('{% static 'images/home/baleniere.jpg' %}');"></div>
+    <div class="container mx-auto px-4 text-center relative">
+        <h2 class="text-3xl md:text-4xl font-serif mb-6">
+            <i class="fas fa-hands-helping mr-3"></i> Collaborons Ensemble
+        </h2>
+        <p class="text-lg md:text-xl max-w-3xl mx-auto mb-8 leading-relaxed">
+            Intéressé par mes initiatives ou souhaitez-vous collaborer sur des projets d'impact? 
+            Contactez-moi pour discuter des opportunités de partenariat.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+            <a href="{% url 'portefolio:contact' %}" class="bg-white text-accent px-8 py-4 rounded-full hover:bg-opacity-90 transition shadow-lg hover:shadow-xl transform hover:scale-105">
+                <i class="fas fa-envelope mr-2"></i> Me Contacter
+            </a>
+            <a href="{% url 'portefolio:foundation' %}" class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-full hover:bg-white hover:text-accent transition shadow-lg hover:shadow-xl transform hover:scale-105">
+                <i class="fas fa-heart mr-2"></i> Ma Fondation
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %} 

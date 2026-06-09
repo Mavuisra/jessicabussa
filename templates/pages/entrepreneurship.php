@@ -1,0 +1,273 @@
+﻿<!-- Hero Section -->
+<section class="relative bg-gradient-to-r from-blue-900 to-primary text-white py-16">
+    <div class="absolute inset-0 bg-cover bg-center opacity-20" style="background-image: url('<?= asset('images/home/okapievent.jpg') ?>');"></div>
+    <div class="container mx-auto px-4 relative">
+        <div class="max-w-3xl">
+            <h1 class="text-4xl font-bold mb-4">Entrepreneure & Consultante</h1>
+            <p class="text-xl mb-6">Fondatrice d'Okapi Consulting Services, une entreprise dédiée à l'excellence dans les services événementiels et de conseil.</p>
+            <div class="flex flex-wrap gap-3">
+                <a href="https://www.okapievents.com/" target="_blank" class="bg-white text-primary hover:bg-gray-100 px-6 py-3 rounded-full transition duration-300 flex items-center">
+                    <i class="fas fa-external-link-alt mr-2"></i> Visiter le site Okapi
+                </a>
+                <a href="<?= url('contact') ?>" class="bg-transparent border-2 border-white hover:bg-white hover:text-primary px-6 py-3 rounded-full transition duration-300">
+                    <i class="fas fa-envelope mr-2"></i> Contact
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Okapi Section -->
+<section class="py-16 bg-light">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+            <div class="w-full md:w-1/2" data-aos="fade-right">
+                <img src="<?= asset('images/home/okapievent.jpg') ?>" alt="Okapi Consulting Services" class="rounded-2xl shadow-lg w-full hover-lift">
+            </div>
+            <div class="w-full md:w-1/2" data-aos="fade-left">
+                <h2 class="text-2xl md:text-3xl font-serif text-primary mb-4 md:mb-6">
+                    <i class="fas fa-briefcase mr-2"></i> Okapi Consulting Services
+                </h2>
+                <p class="text-base md:text-lg mb-3 md:mb-4 text-justify">
+                    Fondée en 2019 sous le nom de SOTRAKIN SARL, l'entreprise avait pour vocation exclusive le transport en République Démocratique du Congo. En 2024, dans une dynamique d'innovation et d'expansion, elle a évolué pour devenir Okapi Consulting Services SARL, une société multiservices opérant désormais dans plusieurs secteurs stratégiques.
+                </p>
+                <p class="text-base md:text-lg mb-3 md:mb-4 text-justify">
+                    En tant que Directrice Générale, Dr Jessica Bussa assure la supervision des opérations, de l'approvisionnement, de la logistique, des ventes ainsi que du développement commercial. Sous son impulsion, Okapi Consulting s'est affirmée comme un acteur clé du secteur privé congolais, incarnant une vision du développement fondée sur l'inclusion économique, la qualité de service et la création de valeur locale.
+                </p>
+                <p class="text-base md:text-lg mb-5 md:mb-6 text-justify">
+                    Okapi Consulting SARL est bien plus qu'une entreprise commerciale : elle reflète la vision de Dr Jessica Bussa pour un développement inclusif, durable et orienté vers la jeunesse. Elle y intègre un fort engagement social, en recrutant et en formant activement les jeunes Congolais. À ce jour, plus de 50 jeunes femmes y travaillent comme hôtesses et agentes de protocole, tandis que de nombreux jeunes hommes sont mobilisés dans les services techniques, notamment la fourniture de matériel de bureau, l'entretien, la logistique et les prestations aux entreprises.
+                </p>
+                <div class="grid grid-cols-2 gap-3 md:gap-4 mb-6 md:mb-8">
+                    <div class="glass p-3 md:p-4 rounded-xl shadow-md">
+                        <i class="fas fa-broom text-xl md:text-2xl text-primary mb-1 md:mb-2"></i>
+                        <h3 class="font-semibold">Okapi Cleaning</h3>
+                        <p class="text-xs md:text-sm">Nettoyage professionnel et entretien</p>
+                    </div>
+                    <div class="glass p-3 md:p-4 rounded-xl shadow-md">
+                        <i class="fas fa-couch text-xl md:text-2xl text-primary mb-1 md:mb-2"></i>
+                        <h3 class="font-semibold">Okapi Intérieur</h3>
+                        <p class="text-xs md:text-sm">Décoration et ameublement</p>
+                    </div>
+                    <div class="glass p-3 md:p-4 rounded-xl shadow-md">
+                        <i class="fas fa-glass-cheers text-xl md:text-2xl text-primary mb-1 md:mb-2"></i>
+                        <h3 class="font-semibold">Okapi Events</h3>
+                        <p class="text-xs md:text-sm">Événementiel et catering</p>
+                    </div>
+                    <div class="glass p-3 md:p-4 rounded-xl shadow-md">
+                        <i class="fas fa-chalkboard-teacher text-xl md:text-2xl text-primary mb-1 md:mb-2"></i>
+                        <h3 class="font-semibold">Coaching</h3>
+                        <p class="text-xs md:text-sm">Développement des affaires</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Impact Social Section -->
+<section class="py-16 bg-white">
+    <div class="container px-4 mx-auto">
+        <div class="text-center mb-10">
+            <p class="text-primary uppercase tracking-widest font-semibold text-sm">Engagement Social</p>
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Notre Impact Social</h2>
+            <div class="w-20 h-1 bg-primary mx-auto mb-6"></div>
+        </div>
+        
+        <div class="flex flex-col md:flex-row items-center gap-8">
+            <div class="w-full md:w-1/2">
+                <p class="text-base md:text-lg mb-6 text-justify">
+                    Okapi Consulting SARL est bien plus qu'une entreprise commerciale : elle reflète la vision de Dr Jessica Bussa pour un développement inclusif, durable et orienté vers la jeunesse. Elle intègre un fort engagement social, en recrutant et en formant activement les jeunes Congolais.
+                </p>
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-primary/5 p-4 rounded-xl flex items-center">
+                        <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mr-3">
+                            <i class="fas fa-female text-primary"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold">50+</h4>
+                            <p class="text-sm text-gray-600">Jeunes femmes</p>
+                        </div>
+                    </div>
+                    <div class="bg-primary/5 p-4 rounded-xl flex items-center">
+                        <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mr-3">
+                            <i class="fas fa-user-tie text-primary"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold">Nombreux</h4>
+                            <p class="text-sm text-gray-600">Jeunes hommes</p>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-base md:text-lg mb-4 text-justify">
+                    Les jeunes femmes y travaillent comme hôtesses et agentes de protocole, tandis que les jeunes hommes sont mobilisés dans les services techniques, notamment la fourniture de matériel de bureau, l'entretien, la logistique et les prestations aux entreprises.
+                </p>
+                <div class="bg-primary/5 p-4 rounded-xl mb-4">
+                    <h3 class="font-semibold text-primary mb-2">Un modèle d'entrepreneuriat social</h3>
+                    <p class="text-gray-700 italic">
+                        "Performance économique et impact communautaire vont de pair."
+                    </p>
+                </div>
+            </div>
+            <div class="w-full md:w-1/2">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="rounded-xl overflow-hidden shadow-md">
+                        <img src="<?= asset('images/home/okapievent.jpg') ?>" alt="Impact Social" class="w-full h-48 object-cover">
+                    </div>
+                    <div class="rounded-xl overflow-hidden shadow-md">
+                        <img src="<?= asset('images/home/formation.jpeg') ?>" alt="Formation" class="w-full h-48 object-cover">
+                    </div>
+                    <div class="rounded-xl overflow-hidden shadow-md col-span-2">
+                        <img src="<?= asset('images/home/fondation.jpg') ?>" alt="Équipe" class="w-full h-48 object-cover">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section class="py-16 bg-gray-50">
+    <div class="container px-4 mx-auto">
+        <div class="text-center mb-10">
+            <p class="text-primary uppercase tracking-widest font-semibold text-sm">Nos Activités</p>
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Pôles d'Expertise</h2>
+            <div class="w-20 h-1 bg-primary mx-auto mb-6"></div>
+            <p class="max-w-2xl mx-auto text-gray-600">
+                Aujourd'hui, Okapi Consulting SARL regroupe plusieurs pôles d'activités complémentaires pour répondre aux divers besoins du marché congolais.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+            <div class="glass p-6 rounded-xl shadow-md hover-lift transition-all duration-300 hover:-translate-y-2 border-t-4 border-blue-500">
+                <div class="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mb-4 mx-auto">
+                    <i class="fas fa-broom text-3xl text-blue-500"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-3 text-center">Okapi Cleaning Services</h3>
+                <p class="text-gray-600 text-center">
+                    Gestion des déchets, désinsectisation et dératisation, fourniture de produits d'entretien et services de nettoyage professionnel.
+                </p>
+            </div>
+            
+            <div class="glass p-6 rounded-xl shadow-md hover-lift transition-all duration-300 hover:-translate-y-2 border-t-4 border-purple-500">
+                <div class="w-16 h-16 bg-purple-500/10 rounded-full flex items-center justify-center mb-4 mx-auto">
+                    <i class="fas fa-couch text-3xl text-purple-500"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-3 text-center">Okapi Intérieur & Décor</h3>
+                <p class="text-gray-600 text-center">
+                    Décoration intérieure, ameublement de maisons et de bureaux, design fonctionnel.
+                </p>
+            </div>
+            
+            <div class="glass p-6 rounded-xl shadow-md hover-lift transition-all duration-300 hover:-translate-y-2 border-t-4 border-green-500">
+                <div class="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mb-4 mx-auto">
+                    <i class="fas fa-glass-cheers text-3xl text-green-500"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-3 text-center">Okapi Events & Catering</h3>
+                <p class="text-gray-600 text-center">
+                    Organisation d'événements et services traiteur.
+                </p>
+            </div>
+            
+            <div class="glass p-6 rounded-xl shadow-md hover-lift transition-all duration-300 hover:-translate-y-2 border-t-4 border-amber-500">
+                <div class="w-16 h-16 bg-amber-500/10 rounded-full flex items-center justify-center mb-4 mx-auto">
+                    <i class="fas fa-chalkboard-teacher text-3xl text-amber-500"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-3 text-center">Coaching & Développement</h3>
+                <p class="text-gray-600 text-center">
+                    Accompagnement stratégique, formations entrepreneuriales, mentorat.
+                </p>
+            </div>
+        </div>
+        
+        <div class="glass p-6 rounded-xl shadow-md max-w-3xl mx-auto">
+            <h3 class="text-xl font-semibold mb-3 text-center text-primary">Développements futurs</h3>
+            <p class="text-gray-600 text-center mb-4">
+                Prochainement, la société étendra ses services à l'immobilier et à l'agriculture, consolidant ainsi son positionnement en tant qu'entreprise à fort impact économique et social.
+            </p>
+            <div class="flex justify-center space-x-4">
+                <div class="flex items-center">
+                    <i class="fas fa-building text-primary mr-2"></i>
+                    <span>Immobilier</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-seedling text-green-500 mr-2"></i>
+                    <span>Agriculture</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-primary/5 p-6 rounded-xl mt-10 max-w-3xl mx-auto">
+            <h3 class="font-semibold text-primary mb-2 text-center">Notre Vision</h3>
+            <p class="text-gray-700 italic text-center">
+                "Par son approche innovante et humaine, Okapi Consulting incarne un modèle d'entrepreneuriat social, où performance économique et impact communautaire vont de pair."
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Business Events Section -->
+<section class="py-16">
+    <div class="container px-4 mx-auto">
+        <div class="text-center mb-10">
+            <p class="text-primary uppercase tracking-widest font-semibold text-sm">Événements Récents</p>
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Nos Réalisations</h2>
+            <div class="w-20 h-1 bg-primary mx-auto mb-6"></div>
+            <p class="max-w-2xl mx-auto text-gray-600">
+                Découvrez les événements et projets d'affaires que nous avons récemment organisés.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+            <?php $__loop_items = $events; foreach ($events as $event): ?>
+            <div class="glass rounded-xl overflow-hidden shadow-md hover-lift">
+                <?php if ($event->image): ?>
+                <div class="h-48 bg-cover bg-center" style="background-image: url('<?= e(media_url($event->image ?? '')) ?>');">
+                    <div class="h-full w-full bg-gradient-to-t from-dark/70 to-transparent/20 flex items-end">
+                        <div class="p-4 text-white">
+                            <span class="bg-primary/80 text-white text-xs px-2 py-1 rounded-full"><?= e(event_type_label($event->event_type ?? '')) ?></span>
+                        </div>
+                    </div>
+                </div>
+                <?php else: ?>
+                <div class="h-48 bg-primary flex items-center justify-center">
+                    <i class="fas fa-calendar-alt text-4xl text-white/80"></i>
+                </div>
+                <?php endif; ?>
+                <div class="p-6">
+                    <h3 class="text-xl font-semibold mb-2"><?= e($event->title) ?></h3>
+                    <p class="text-gray-500 text-sm mb-3"><i class="far fa-calendar-alt mr-2"></i><?= e(date('d M Y', strtotime((string) ($event->date ?? '')))) ?></p>
+                    <p class="text-gray-600 mb-4"><?= e(truncate_words(strip_tags((string) ($event->description ?? '')), 20)) ?></p>
+                </div>
+            </div>
+            <?php endforeach; ?>
+<?php if (empty($__loop_items ?? [])): ?>
+
+            <div class="col-span-3 text-center py-10">
+                <p class="text-gray-500">Aucun événement d'affaires à afficher actuellement.</p>
+            </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</section>
+
+<!-- Contact CTA Section -->
+<section class="py-12 bg-primary text-white relative overflow-hidden">
+    <div class="absolute inset-0 bg-cover bg-center opacity-10" style="background-image: url('<?= asset('images/home/okapievent.jpg') ?>');"></div>
+    <div class="container mx-auto px-4 text-center relative">
+        <h2 class="text-2xl md:text-3xl font-serif mb-4">
+            <i class="fas fa-handshake mr-2"></i> Travaillons Ensemble
+        </h2>
+        <p class="text-base md:text-lg max-w-3xl mx-auto mb-6">
+            Vous avez un projet, un événement ou besoin de conseils en affaires? 
+            Contactez-nous pour discuter de la façon dont nous pouvons vous aider à atteindre vos objectifs.
+        </p>
+        <div class="flex flex-wrap justify-center gap-3">
+            <a href="<?= url('contact') ?>" class="bg-white text-primary px-6 py-3 rounded-full hover:bg-opacity-90 transition-colors">
+                <i class="fas fa-envelope mr-2"></i> Contactez-nous
+            </a>
+            <a href="tel:+243000000000" class="bg-transparent border-2 border-white text-white px-6 py-3 rounded-full hover:bg-white hover:text-primary transition-colors">
+                <i class="fas fa-phone mr-2"></i> Appelez-nous
+            </a>
+        </div>
+    </div>
+</section>

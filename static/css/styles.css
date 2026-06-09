@@ -1,0 +1,462 @@
+/* Base Styles */
+:root {
+    --primary: #B47B48;
+    --secondary: #FAD6A5;
+    --accent: #544E43;
+    --dark: #2D2926;
+    --light: #F8F3E9;
+    --text: #333333;
+    --border-radius: 8px;
+    --transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    touch-action: manipulation; /* Optimisation tactile */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+    
+    h1 {
+        font-size: 2.25rem;
+    }
+    
+    h2 {
+        font-size: 1.75rem;
+    }
+    
+    h3 {
+        font-size: 1.25rem;
+    }
+}
+
+/* Glass Effect */
+.glass {
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Animations and Effects */
+.hover-lift {
+    transition: var(--transition);
+    opacity: 0.95;
+    transform: translateY(5px);
+}
+
+.hover-lift:hover, .hover-lift:focus {
+    transform: translateY(0);
+    opacity: 1;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.animated-button {
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition);
+    z-index: 1;
+}
+
+.animated-button:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.5s ease-out;
+}
+
+.animated-button:hover:after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+.floating {
+    animation: floating 5s ease-in-out infinite;
+}
+
+.floating-slow {
+    animation: floating 8s ease-in-out infinite;
+}
+
+.floating-fast {
+    animation: floating 3s ease-in-out infinite;
+}
+
+@keyframes floating {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.animate-text-1 {
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.animate-text-2 {
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.animate-text-3 {
+    animation: fadeInUp 0.8s ease-out 0.6s both;
+}
+
+.animate-text-4 {
+    animation: fadeInUp 0.8s ease-out 0.8s both;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.typewriter {
+    border-right: 2px solid var(--primary);
+    white-space: nowrap;
+    overflow: hidden;
+    animation: blink-caret .75s step-end infinite;
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: var(--primary); }
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 768px) {
+    /* Safe area insets for iOS devices */
+    @supports (padding: max(0px)) {
+        .mobile-tab-bar {
+            padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+        }
+        
+        footer {
+            padding-bottom: max(2rem, env(safe-area-inset-bottom) + 4rem);
+        }
+    }
+    
+    /* Optimized touch targets */
+    button, 
+    a, 
+    .clickable, 
+    [role="button"] {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    /* Remove hover effects on mobile */
+    .hover-lift:hover {
+        transform: none;
+    }
+    
+    /* Add specific tap highlight styles */
+    .tap-highlight {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .tap-highlight::after {
+        content: '';
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+        background-repeat: no-repeat;
+        background-position: 50%;
+        transform: scale(10, 10);
+        opacity: 0;
+        transition: transform .3s, opacity .5s;
+    }
+    
+    .tap-highlight:active::after {
+        transform: scale(0, 0);
+        opacity: .3;
+        transition: 0s;
+    }
+    
+    /* Active state for touch elements */
+    .active-state:active {
+        transform: scale(0.98);
+        opacity: 0.9;
+    }
+    
+    /* Mobile navigation active styles */
+    .mobile-tab-item.active {
+        color: var(--primary);
+    }
+    
+    .mobile-tab-item.active i {
+        color: var(--primary);
+    }
+    
+    /* Fix for iOS overscroll effect */
+    html {
+        position: relative;
+        overflow-x: hidden;
+        height: 100%;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Mobile bottom spacing for content */
+    .has-mobile-nav .content-wrapper {
+        padding-bottom: 5rem;
+    }
+    
+    /* Mobile slider styles */
+    .testimonial-slider {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .testimonial-slide {
+        transform: translateX(0);
+        transition: transform 0.3s ease;
+    }
+}
+
+/* Improved accessibility focus states */
+a:focus, button:focus, input:focus, select:focus, textarea:focus, [tabindex]:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* Skip to content link for keyboard users */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--primary);
+    color: white;
+    padding: 8px;
+    z-index: 100;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* Utilities */
+.text-primary {
+    color: var(--primary);
+}
+
+.text-secondary {
+    color: var(--secondary);
+}
+
+.text-accent {
+    color: var(--accent);
+}
+
+.text-dark {
+    color: var(--dark);
+}
+
+.bg-primary {
+    background-color: var(--primary);
+}
+
+.bg-secondary {
+    background-color: var(--secondary);
+}
+
+.bg-accent {
+    background-color: var(--accent);
+}
+
+.bg-dark {
+    background-color: var(--dark);
+}
+
+.bg-light {
+    background-color: var(--light);
+}
+
+/* Styles spécifiques pour mobile */
+.mobile-tab-bar {
+    transition: transform 0.3s ease;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+.mobile-tab-item {
+    opacity: 0.7;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    position: relative;
+}
+
+.mobile-tab-item.active {
+    opacity: 1;
+    color: var(--color-primary);
+}
+
+.mobile-tab-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+}
+
+/* Éléments tactiles optimisés */
+.tap-highlight {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.active-state:active {
+    transform: scale(0.96);
+    transition: transform 0.1s ease;
+}
+
+/* Améliorer l'aspect des boutons et contrôles tactiles */
+button, 
+input[type="submit"],
+.btn {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    border-radius: 8px;
+    min-height: 44px;
+}
+
+/* Ajouter une marge en bas pour les pages avec navigation mobile */
+body.has-mobile-nav {
+    padding-bottom: 70px;
+}
+
+/* Plus grand contrôles form pour mobile */
+@media (max-width: 768px) {
+    input, select, textarea {
+        font-size: 16px; /* Empêche le zoom iOS sur focus */
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 16px;
+    }
+    
+    .form-control {
+        min-height: 44px;
+    }
+    
+    /* Boutons plus grands et faciles à toucher */
+    .btn {
+        padding: 12px 24px;
+        font-size: 16px;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Augmenter la taille des contrôles interactifs */
+    a, button, select, summary {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    /* Améliorer l'espacement pour la lisibilité */
+    p, li {
+        line-height: 1.6;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+        margin-bottom: 0.8em;
+    }
+}
+
+/* Transition fluide pour le menu mobile */
+#mobileFullMenu {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+}
+
+#mobileFullMenu.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+}
+
+/* Animation pour le bouton menu */
+#menuToggle {
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+#menuToggle:active {
+    transform: scale(0.92);
+}
+
+/* Sélection de texte */
+::selection {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+/* Inertie de défilement */
+.smooth-scroll {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Prévenir le rebond élastique iOS */
+html {
+    overflow: hidden;
+    height: 100%;
+}
+
+body {
+    overflow: auto;
+    height: 100%;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: none;
+}
+
+/* Animation d'apparition quand les éléments deviennent visibles */
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+} 

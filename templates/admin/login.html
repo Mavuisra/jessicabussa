@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration - Jessica Bussa</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4F46E5;
+            --secondary-color: #7C3AED;
+        }
+        .bg-primary { background-color: var(--primary-color); }
+        .text-primary { color: var(--primary-color); }
+        .from-primary { --tw-gradient-from: var(--primary-color); }
+        .to-secondary { --tw-gradient-to: var(--secondary-color); }
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen bg-gradient-to-br from-primary/5 to-secondary/5 flex items-center justify-center p-4">
+        <div class="max-w-md w-full">
+            <!-- Login card -->
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+                <!-- Header -->
+                <div class="relative h-32 bg-gradient-to-r from-primary to-secondary">
+                    <div class="absolute inset-0 bg-black/20"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="text-center text-white">
+                            <h1 class="text-3xl font-serif mb-2">Administration</h1>
+                            <p class="text-white/80">Connectez-vous pour accéder au tableau de bord</p>
+                        </div>
+                    </div>
+                    <!-- Decorative elements -->
+                    <div class="absolute top-0 left-0 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
+                    <div class="absolute bottom-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
+                </div>
+
+                <!-- Form -->
+                <div class="p-8">
+                    {% if messages %}
+                    <div class="mb-6">
+                        {% for message in messages %}
+                        <div class="p-4 rounded-lg {% if message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-blue-100 text-blue-700{% endif %} animate-fade-in">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <form method="post" class="space-y-6">
+                        {% csrf_token %}
+                        
+                        <!-- Username field -->
+                        <div>
+                            <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Nom d'utilisateur</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-user text-gray-400"></i>
+                                </div>
+                                <input type="text" name="username" id="username" required
+                                    class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+                                    placeholder="Entrez votre nom d'utilisateur">
+                            </div>
+                        </div>
+
+                        <!-- Password field -->
+                        <div>
+                            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-lock text-gray-400"></i>
+                                </div>
+                                <input type="password" name="password" id="password" required
+                                    class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+                                    placeholder="Entrez votre mot de passe">
+                            </div>
+                        </div>
+
+                        <!-- Remember me -->
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <input type="checkbox" name="remember" id="remember"
+                                    class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                                <label for="remember" class="ml-2 block text-sm text-gray-700">
+                                    Se souvenir de moi
+                                </label>
+                            </div>
+                            <a href="#" class="text-sm text-primary hover:text-primary/80 transition-colors">
+                                Mot de passe oublié ?
+                            </a>
+                        </div>
+
+                        <!-- Submit button -->
+                        <button type="submit"
+                            class="w-full bg-primary text-white py-2 px-4 rounded-lg hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2 transition-colors flex items-center justify-center group">
+                            <span>Se connecter</span>
+                            <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="mt-8 text-center text-sm text-gray-500">
+                <p>Besoin d'aide ? <a href="#" class="text-primary hover:text-primary/80 transition-colors">Contactez l'administrateur</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add animation to form fields on focus
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('scale-105');
+            });
+            input.addEventListener('blur', function() {
+                this.parentElement.classList.remove('scale-105');
+            });
+        });
+
+        // Add loading state to submit button
+        const form = document.querySelector('form');
+        const submitButton = form.querySelector('button[type="submit"]');
+        
+        form.addEventListener('submit', function() {
+            submitButton.disabled = true;
+            submitButton.innerHTML = `
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Connexion en cours...
+            `;
+        });
+    });
+    </script>
+</body>
+</html> 

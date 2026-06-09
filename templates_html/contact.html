@@ -1,0 +1,305 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact - Jessica Bussa{% endblock %}
+
+{% block extra_css %}
+<style>
+    .input-field {
+        transition: all 0.3s ease;
+        border: 1px solid #e2e8f0;
+    }
+    
+    .input-field:focus {
+        border-color: transparent;
+        box-shadow: 0 0 0 2px rgba(35, 162, 247, 0.5);
+    }
+    
+    .input-field-label {
+        position: absolute;
+        top: -12px;
+        left: 10px;
+        padding: 0 5px;
+        font-size: 12px;
+        background-color: white;
+        transition: all 0.3s ease;
+    }
+    
+    .social-icon {
+        transition: all 0.3s ease;
+    }
+    
+    .social-icon:hover {
+        transform: translateY(-3px);
+    }
+    
+    .contact-card {
+        transition: all 0.3s ease;
+        border-left: 3px solid transparent;
+    }
+    
+    .contact-card:hover {
+        transform: translateY(-5px);
+        border-left: 3px solid #23a2f7;
+    }
+    
+    .contact-icon {
+        background-image: linear-gradient(135deg, #0063C9, #23a2f7, #4BB4FF);
+        color: white;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-size: 20px;
+        box-shadow: 0 4px 10px rgba(0, 99, 201, 0.2);
+    }
+    
+    .map-container {
+        position: relative;
+        overflow: hidden;
+        border-radius: 0.75rem;
+    }
+    
+    .map-container::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(0, 99, 201, 0.1), rgba(35, 162, 247, 0.1));
+        pointer-events: none;
+    }
+    
+    /* Animation pour les éléments qui apparaissent */
+    .fade-in {
+        animation: fadeIn 0.6s ease forwards;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Animation pour la section héros */
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    
+    .gradient-animation {
+        background-size: 300% 300%;
+        animation: gradientBG 12s ease infinite;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative pt-24 pb-16 md:pb-24 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-800 text-white gradient-animation">
+    <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-800 opacity-70"></div>
+        <img src="{% static 'images/jessica.png' %}" alt="Background" class="absolute w-full h-full object-cover opacity-10">
+        
+        <!-- Formes décoratives -->
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden">
+            <div class="absolute top-10 left-10 w-20 h-20 rounded-full bg-white opacity-5"></div>
+            <div class="absolute bottom-10 right-10 w-32 h-32 rounded-full bg-white opacity-5"></div>
+            <div class="absolute top-1/4 right-1/4 w-16 h-16 rounded-full bg-white opacity-5"></div>
+        </div>
+    </div>
+    
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="text-center max-w-3xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 animate-text-1">Contactez-moi</h1>
+            <p class="text-xl md:text-2xl opacity-90 mb-8 animate-text-2">N'hésitez pas à me contacter pour toute question ou collaboration</p>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Info & Form Section -->
+<section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- Contact Info -->
+            <div class="fade-in" style="animation-delay: 0.2s;">
+                <h2 class="text-3xl font-bold mb-8 text-gradient">Mes coordonnées</h2>
+                
+                <!-- Cards for different contact methods -->
+                <div class="space-y-6">
+                    <!-- Address Card -->
+                    <div class="contact-card bg-white rounded-lg shadow-md p-6 flex">
+                        <div class="contact-icon mr-6">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">Adresse</h3>
+                            <p class="text-gray-600">Kinshasa, République Démocratique du Congo</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Email Card -->
+                    <div class="contact-card bg-white rounded-lg shadow-md p-6 flex">
+                        <div class="contact-icon mr-6">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">Email</h3>
+                            <p class="text-gray-600">contact@jessicabussa.cd</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Phone Card -->
+                    <div class="contact-card bg-white rounded-lg shadow-md p-6 flex">
+                        <div class="contact-icon mr-6">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">Téléphone</h3>
+                            <p class="text-gray-600">+243 123 456 789</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Social Media -->
+                <div class="mt-10">
+                    <h3 class="text-xl font-bold mb-4">Suivez-moi sur les réseaux sociaux</h3>
+                    <div class="flex space-x-4">
+                        <a href="https://www.facebook.com/profile.php?id=100071847219729" class="social-icon w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:text-[#1877F2]">
+                            <i class="fab fa-facebook-f text-xl"></i>
+                        </a>
+                        <a href="https://twitter.com/bussa_jessica" class="social-icon w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:text-[#1DA1F2]">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="https://www.instagram.com/jessica_bussa/" class="social-icon w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:text-[#E4405F]">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/jessica-bussa-phd-02a10b51/" class="social-icon w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:text-[#0A66C2]">
+                            <i class="fab fa-linkedin-in text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Form -->
+            <div class="fade-in" style="animation-delay: 0.4s;">
+                <h2 class="text-3xl font-bold mb-8 text-gradient">Envoyez-moi un message</h2>
+                
+                <form method="post" class="bg-white rounded-lg shadow-md p-8">
+                    {% csrf_token %}
+                    
+                    <!-- Name Field -->
+                    <div class="mb-6 relative">
+                        <label for="id_name" class="input-field-label text-gray-700">Nom</label>
+                        <input type="text" name="name" id="id_name" required class="input-field w-full px-4 py-3 rounded-lg focus:outline-none" placeholder="Votre nom">
+                    </div>
+                    
+                    <!-- Email Field -->
+                    <div class="mb-6 relative">
+                        <label for="id_email" class="input-field-label text-gray-700">Email</label>
+                        <input type="email" name="email" id="id_email" required class="input-field w-full px-4 py-3 rounded-lg focus:outline-none" placeholder="Votre email">
+                    </div>
+                    
+                    <!-- Subject Field -->
+                    <div class="mb-6 relative">
+                        <label for="id_subject" class="input-field-label text-gray-700">Sujet</label>
+                        <input type="text" name="subject" id="id_subject" required class="input-field w-full px-4 py-3 rounded-lg focus:outline-none" placeholder="Sujet de votre message">
+                    </div>
+                    
+                    <!-- Message Field -->
+                    <div class="mb-6 relative">
+                        <label for="id_message" class="input-field-label text-gray-700">Message</label>
+                        <textarea name="message" id="id_message" required rows="5" class="input-field w-full px-4 py-3 rounded-lg focus:outline-none" placeholder="Votre message"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn-gradient px-6 py-3 rounded-lg w-full text-white font-medium text-lg hover:shadow-lg transition-all">
+                        Envoyer le message <i class="fas fa-paper-plane ml-2"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Map Section -->
+        <div class="mt-16 fade-in" style="animation-delay: 0.6s;">
+            <h2 class="text-3xl font-bold mb-8 text-center text-gradient">Localisez-moi</h2>
+            <div class="map-container w-full h-96 rounded-xl overflow-hidden shadow-lg">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d253682.45932780007!2d15.22417805!3d-4.32469805!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1a6a3130fe7e34e1%3A0x18591085f0e245e1!2sKinshasa!5e0!3m2!1sfr!2scd!4v1650550424542!5m2!1sfr!2scd" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold mb-12 text-center text-gradient">Questions fréquentes</h2>
+        
+        <div class="max-w-3xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- FAQ Item 1 -->
+                <div class="bg-white rounded-lg shadow-md p-6 fade-in" style="animation-delay: 0.7s;">
+                    <h3 class="text-xl font-bold mb-3">Comment puis-je collaborer avec vous ?</h3>
+                    <p class="text-gray-600">Vous pouvez me contacter directement par email ou via le formulaire de contact pour discuter de potentielles collaborations dans les domaines du leadership, de l'entrepreneuriat ou du développement communautaire.</p>
+                </div>
+                
+                <!-- FAQ Item 2 -->
+                <div class="bg-white rounded-lg shadow-md p-6 fade-in" style="animation-delay: 0.8s;">
+                    <h3 class="text-xl font-bold mb-3">Puis-je vous inviter à un événement ?</h3>
+                    <p class="text-gray-600">Oui, je suis disponible pour des conférences et des événements, envoyez-moi les détails via le formulaire et je vous répondrai dans les plus brefs délais.</p>
+                </div>
+                
+                <!-- FAQ Item 3 -->
+                <div class="bg-white rounded-lg shadow-md p-6 fade-in" style="animation-delay: 0.9s;">
+                    <h3 class="text-xl font-bold mb-3">Comment soutenir votre fondation ?</h3>
+                    <p class="text-gray-600">Vous pouvez soutenir la Fondation Maboko Ya Elikia par des dons, du volontariat ou des partenariats. Contactez-moi directement pour discuter des possibilités.</p>
+                </div>
+                
+                <!-- FAQ Item 4 -->
+                <div class="bg-white rounded-lg shadow-md p-6 fade-in" style="animation-delay: 1s;">
+                    <h3 class="text-xl font-bold mb-3">Quel est le délai de réponse habituel ?</h3>
+                    <p class="text-gray-600">Je m'efforce de répondre à toutes les demandes dans un délai de 48 heures ouvrables. Pour les urgences, n'hésitez pas à me contacter par téléphone.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animation d'entrée pour les éléments avec la classe fade-in
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Ajouter la classe pour déclencher l'animation
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    // Désinscrire l'élément une fois qu'il est animé
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        // Préparer les éléments pour l'animation
+        fadeElements.forEach(el => {
+            // État initial avant l'animation
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            // Observer l'élément
+            observer.observe(el);
+        });
+    });
+</script>
+{% endblock %}

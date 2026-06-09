@@ -1,0 +1,51 @@
+# Environnement / secrets
+.env
+*.env
+!.env.example
+
+# Fichiers personnels (copie home — ne pas versionner)
+.bashrc
+.profile
+.vimrc
+.gitconfig
+.pythonstartup.py
+.cache/
+.ipython/
+.local/
+.virtualenvs/
+
+# PHP
+/vendor/
+/storage/sessions/*
+!/storage/sessions/.gitkeep
+composer.phar
+
+# Base de données locale
+*.sqlite3
+db.sqlite3
+
+# Uploads utilisateurs
+/media/*
+!/media/.gitkeep
+
+# Python (scripts utilitaires)
+*.pyc
+*.pyo
+__pycache__/
+env/
+venv/
+ENV/
+.venv/
+.ENV/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Legacy Django (contient d'anciens secrets — garder en local uniquement)
+/_legacy_django/

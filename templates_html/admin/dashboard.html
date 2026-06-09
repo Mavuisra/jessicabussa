@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de bord - Administration</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #4F46E5;
+            --secondary-color: #7C3AED;
+        }
+        .bg-primary { background-color: var(--primary-color); }
+        .text-primary { color: var(--primary-color); }
+        .from-primary { --tw-gradient-from: var(--primary-color); }
+        .to-secondary { --tw-gradient-to: var(--secondary-color); }
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .sidebar {
+            width: 250px;
+            transition: all 0.3s ease;
+        }
+        .main-content {
+            margin-left: 250px;
+            transition: all 0.3s ease;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 0;
+                overflow: hidden;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .sidebar.active {
+                width: 250px;
+            }
+            .main-content.active {
+                margin-left: 250px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Sidebar -->
+    <aside class="sidebar fixed top-0 left-0 h-full bg-white shadow-lg z-10">
+        <div class="p-4 border-b">
+            <div class="flex items-center justify-between">
+                <h1 class="text-xl font-bold text-primary">Administration</h1>
+                <button id="toggle-sidebar" class="md:hidden text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        <nav class="p-4">
+            <ul class="space-y-2">
+                <li>
+                    <a href="{% url 'portefolio:admin_dashboard' %}" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg {% if request.resolver_match.url_name == 'admin_dashboard' %}bg-primary/10{% endif %}">
+                        <i class="fas fa-tachometer-alt w-6"></i>
+                        <span>Tableau de bord</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'portefolio:admin_articles' %}" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg {% if request.resolver_match.url_name == 'admin_articles' %}bg-primary/10{% endif %}">
+                        <i class="fas fa-newspaper w-6"></i>
+                        <span>Articles</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'portefolio:admin_events' %}" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg {% if request.resolver_match.url_name == 'admin_events' %}bg-primary/10{% endif %}">
+                        <i class="fas fa-calendar-alt w-6"></i>
+                        <span>Événements</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'portefolio:admin_gallery' %}" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg {% if request.resolver_match.url_name == 'admin_gallery' %}bg-primary/10{% endif %}">
+                        <i class="fas fa-images w-6"></i>
+                        <span>Galerie</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'portefolio:admin_contacts' %}" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg {% if request.resolver_match.url_name == 'admin_contacts' %}bg-primary/10{% endif %}">
+                        <i class="fas fa-envelope w-6"></i>
+                        <span>Messages</span>
+                        {% if new_contacts > 0 %}
+                        <span class="ml-auto bg-red-500 text-white text-xs rounded-full px-2 py-1">{{ new_contacts }}</span>
+                        {% endif %}
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'portefolio:admin_newsletter' %}" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg {% if request.resolver_match.url_name == 'admin_newsletter' %}bg-primary/10{% endif %}">
+                        <i class="fas fa-newspaper w-6"></i>
+                        <span>Newsletter</span>
+                        <span class="ml-auto bg-green-500 text-white text-xs rounded-full px-2 py-1">{{ active_subscribers }}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'portefolio:admin_campaigns' %}" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg {% if request.resolver_match.url_name == 'admin_campaigns' %}bg-primary/10{% endif %}">
+                        <i class="fas fa-paper-plane w-6"></i>
+                        <span>Campagnes Email</span>
+                        {% if draft_campaigns > 0 %}
+                        <span class="ml-auto bg-orange-500 text-white text-xs rounded-full px-2 py-1">{{ draft_campaigns }}</span>
+                        {% endif %}
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg">
+                        <i class="fas fa-users w-6"></i>
+                        <span>Utilisateurs</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg">
+                        <i class="fas fa-cog w-6"></i>
+                        <span>Paramètres</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="absolute bottom-0 left-0 right-0 p-4 border-t">
+            <div class="flex items-center">
+                <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium text-gray-700">{{ request.user.username }}</p>
+                    <a href="{% url 'portefolio:admin_logout' %}" class="text-red-600 hover:text-red-800">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Déconnexion
+                    </a>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content min-h-screen p-6">
+        <!-- Header -->
+        <header class="mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800">Tableau de bord</h1>
+                    <p class="text-gray-500">Bienvenue dans votre espace d'administration</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="p-2 text-gray-500 hover:text-primary rounded-full hover:bg-primary/10">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <button class="p-2 text-gray-500 hover:text-primary rounded-full hover:bg-primary/10">
+                        <i class="fas fa-envelope"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-500">Total Articles</p>
+                        <h3 class="text-2xl font-bold text-gray-800">{{ total_articles }}</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <div class="flex items-center text-sm">
+                        <span class="text-green-500 flex items-center">
+                            <i class="fas fa-arrow-up mr-1"></i>
+                            12%
+                        </span>
+                        <span class="text-gray-500 ml-2">depuis le mois dernier</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-500">Articles Publiés</p>
+                        <h3 class="text-2xl font-bold text-gray-800">{{ published_articles }}</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-500">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <div class="flex items-center text-sm">
+                        <span class="text-green-500 flex items-center">
+                            <i class="fas fa-arrow-up mr-1"></i>
+                            8%
+                        </span>
+                        <span class="text-gray-500 ml-2">depuis le mois dernier</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-500">Articles en Brouillon</p>
+                        <h3 class="text-2xl font-bold text-gray-800">{{ draft_articles }}</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-500">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <div class="flex items-center text-sm">
+                        <span class="text-yellow-500 flex items-center">
+                            <i class="fas fa-arrow-down mr-1"></i>
+                            3%
+                        </span>
+                        <span class="text-gray-500 ml-2">depuis le mois dernier</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-500">Total Événements</p>
+                        <h3 class="text-2xl font-bold text-gray-800">{{ total_events }}</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-500">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <div class="flex items-center text-sm">
+                        <span class="text-blue-500 flex items-center">
+                            <i class="fas fa-calendar-check mr-1"></i>
+                            {{ upcoming_events }} à venir
+                        </span>
+                        <span class="text-gray-500 ml-2">événements programmés</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contacts and Newsletter Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-500">Messages de Contact</p>
+                        <h3 class="text-2xl font-bold text-gray-800">{{ total_contacts }}</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-500">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <div class="flex items-center text-sm">
+                        <span class="text-blue-500 flex items-center">
+                            <i class="fas fa-exclamation-circle mr-1"></i>
+                            {{ new_contacts }} nouveaux
+                        </span>
+                        <span class="text-gray-500 ml-2">messages non lus</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-500">Abonnés Newsletter</p>
+                        <h3 class="text-2xl font-bold text-gray-800">{{ total_subscribers }}</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-500">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <div class="flex items-center text-sm">
+                        <span class="text-green-500 flex items-center">
+                            <i class="fas fa-check-circle mr-1"></i>
+                            {{ active_subscribers }} actifs
+                        </span>
+                        <span class="text-gray-500 ml-2">abonnés actifs</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-500">Visiteurs Uniques</p>
+                        <h3 class="text-2xl font-bold text-gray-800">{{ total_unique_visitors }}</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-purple-500">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <div class="flex items-center text-sm">
+                        <span class="text-purple-500 flex items-center">
+                            <i class="fas fa-chart-line mr-1"></i>
+                            {{ visitors_this_week }} cette semaine
+                        </span>
+                        <span class="text-gray-500 ml-2">nouveaux visiteurs</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-500">Campagnes Email</p>
+                        <h3 class="text-2xl font-bold text-gray-800">{{ total_campaigns }}</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-purple-500">
+                        <i class="fas fa-paper-plane"></i>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <div class="flex items-center text-sm">
+                        <span class="text-purple-500 flex items-center">
+                            <i class="fas fa-edit mr-1"></i>
+                            {{ draft_campaigns }} brouillons
+                        </span>
+                        <span class="text-gray-500 ml-2">campagnes en cours</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-500">Événements Publiés</p>
+                        <h3 class="text-2xl font-bold text-gray-800">{{ published_events }}</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-500">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <div class="flex items-center text-sm">
+                        <span class="text-green-500 flex items-center">
+                            <i class="fas fa-calendar-check mr-1"></i>
+                            {{ upcoming_events }} à venir
+                        </span>
+                        <span class="text-gray-500 ml-2">événements programmés</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-500">Événements en Brouillon</p>
+                        <h3 class="text-2xl font-bold text-gray-800">{{ draft_events }}</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-500">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <div class="flex items-center text-sm">
+                        <span class="text-yellow-500 flex items-center">
+                            <i class="fas fa-clock mr-1"></i>
+                            En préparation
+                        </span>
+                        <span class="text-gray-500 ml-2">événements en cours</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-500">Vues Totales</p>
+                        <h3 class="text-2xl font-bold text-gray-800">{{ total_views }}</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-purple-500">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <div class="flex items-center text-sm">
+                        <span class="text-purple-500 flex items-center">
+                            <i class="fas fa-chart-line mr-1"></i>
+                            Toutes pages
+                        </span>
+                        <span class="text-gray-500 ml-2">vues cumulées</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-500">Contenu Total</p>
+                        <h3 class="text-2xl font-bold text-gray-800">{{ total_articles|add:total_events }}</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-500">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <div class="flex items-center text-sm">
+                        <span class="text-indigo-500 flex items-center">
+                            <i class="fas fa-plus mr-1"></i>
+                            Articles + Événements
+                        </span>
+                        <span class="text-gray-500 ml-2">contenu publié</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts and Recent Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Chart -->
+            <div class="lg:col-span-2 bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800">Statistiques Générales</h3>
+                    <div class="flex items-center space-x-2">
+                        <button class="px-3 py-1 text-sm bg-primary/10 text-primary rounded-lg">Semaine</button>
+                        <button class="px-3 py-1 text-sm text-gray-500 hover:bg-gray-100 rounded-lg">Mois</button>
+                        <button class="px-3 py-1 text-sm text-gray-500 hover:bg-gray-100 rounded-lg">Année</button>
+                    </div>
+                </div>
+                <div class="h-80">
+                    <canvas id="articlesChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Articles -->
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800">Articles Récents</h3>
+                    <a href="{% url 'portefolio:admin_articles' %}" class="text-sm text-primary hover:text-primary/80">Voir tout</a>
+                </div>
+                <div class="space-y-4">
+                    {% for article in recent_articles %}
+                    <div class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                        <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-sm font-medium text-gray-800 truncate">{{ article.title }}</h4>
+                            <p class="text-xs text-gray-500">{{ article.created_at|date:"d M Y" }}</p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <a href="{% url 'portefolio:admin_article_edit' article.pk %}" class="p-1 text-gray-400 hover:text-primary">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{% url 'portefolio:admin_article_delete' article.pk %}" class="p-1 text-gray-400 hover:text-red-500">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Events -->
+        <div class="mt-6">
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800">Événements Récents</h3>
+                    <a href="{% url 'portefolio:admin_events' %}" class="text-sm text-primary hover:text-primary/80">Voir tout</a>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {% for event in recent_events %}
+                    <div class="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center text-blue-500">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h4 class="text-sm font-medium text-gray-800 truncate">{{ event.title }}</h4>
+                                <p class="text-xs text-gray-500">{{ event.date|date:"d M Y" }}</p>
+                                <p class="text-xs text-gray-400">{{ event.get_event_type_display }}</p>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                                <a href="{% url 'portefolio:admin_event_edit' event.pk %}" class="p-1 text-gray-400 hover:text-primary">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{% url 'portefolio:admin_event_delete' event.pk %}" class="p-1 text-gray-400 hover:text-red-500">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Toggle sidebar on mobile
+        document.getElementById('toggle-sidebar').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+            document.querySelector('.main-content').classList.toggle('active');
+        });
+
+        // Initialize charts
+        const ctx = document.getElementById('articlesChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+                datasets: [{
+                    label: 'Articles publiés',
+                    data: [12, 19, 15, 17, 22, 24, 21],
+                    borderColor: '#4F46E5',
+                    backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            display: true,
+                            drawBorder: false
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

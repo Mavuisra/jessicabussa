@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Jessica Bussa - Engagement Politique{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative overflow-hidden">
+    <!-- Hero background with overlay -->
+    <div class="w-full h-[60vh] md:h-[50vh] bg-cover bg-center" style="background-image: url('{% static 'images/politics-hero.jpg' %}');">
+        <div class="absolute inset-0 bg-gradient-to-r from-primary/90 to-primary/70"></div>
+        <div class="absolute inset-0 flex items-center justify-center">
+            <div class="text-center text-white z-10 px-4 animate-text-1">
+                <h1 class="text-4xl md:text-5xl font-serif mb-4 md:mb-6">Engagement Politique</h1>
+                <p class="text-xl md:text-2xl animate-text-2">Leadership | Vision | Action</p>
+                <!-- Decorative elements -->
+                <div class="mt-8 flex justify-center space-x-4">
+                    <div class="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                    <div class="w-2 h-2 bg-white rounded-full animate-pulse delay-100"></div>
+                    <div class="w-2 h-2 bg-white rounded-full animate-pulse delay-200"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Floating decorative elements -->
+    <div class="absolute top-1/4 right-1/4 w-16 md:w-24 h-16 md:h-24 rounded-full bg-secondary/30 blur-xl floating-slow"></div>
+    <div class="absolute bottom-1/3 right-1/3 w-20 md:w-32 h-20 md:h-32 rounded-full bg-white/20 blur-xl floating"></div>
+</section>
+
+<!-- Vision Politique Section -->
+<section class="py-12 md:py-16 bg-white relative overflow-hidden">
+    <!-- Background decorative elements -->
+    <div class="absolute -top-24 -left-24 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-0 right-0 w-96 h-96 bg-secondary/5 rounded-full blur-3xl"></div>
+    
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="max-w-4xl mx-auto fade-in">
+            <h2 class="text-2xl md:text-3xl font-serif text-primary mb-8 text-center">
+                <i class="fas fa-flag mr-2"></i> Vision Politique
+            </h2>
+            
+            <div class="glass rounded-2xl shadow-md p-6 md:p-8 mb-10 hover-lift">
+                <p class="text-base md:text-lg mb-6">
+                    En tant que leader politique, je m'engage à promouvoir un développement durable et inclusif pour la République Démocratique du Congo. Ma vision s'articule autour de trois piliers fondamentaux :
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="glass rounded-xl p-6 text-center hover-lift">
+                        <div class="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-users text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2 text-primary">Inclusion Sociale</h3>
+                        <p>Promotion de l'égalité des chances et de l'accès aux services de base pour tous les citoyens.</p>
+                    </div>
+                    
+                    <div class="glass rounded-xl p-6 text-center hover-lift">
+                        <div class="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-chart-line text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2 text-primary">Développement Économique</h3>
+                        <p>Création d'opportunités économiques et promotion de l'entrepreneuriat local.</p>
+                    </div>
+                    
+                    <div class="glass rounded-xl p-6 text-center hover-lift">
+                        <div class="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-balance-scale text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2 text-primary">Gouvernance</h3>
+                        <p>Renforcement des institutions et promotion de la transparence dans la gestion publique.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Initiatives Section -->
+<section class="py-12 md:py-16 bg-light relative overflow-hidden">
+    <div class="container mx-auto px-4 relative z-10">
+        <h2 class="text-2xl md:text-3xl font-serif text-primary mb-10 text-center fade-in">
+            <i class="fas fa-bullhorn mr-2"></i> Initiatives Clés
+        </h2>
+        
+        <div class="max-w-4xl mx-auto">
+            <div class="space-y-8">
+                <!-- Initiative 1 -->
+                <div class="glass rounded-2xl p-6 md:p-8 hover-lift fade-in">
+                    <div class="flex flex-col md:flex-row gap-6 items-center">
+                        <div class="w-full md:w-1/3">
+                            <img src="{% static 'images/initiative1.jpg' %}" alt="Initiative 1" class="rounded-xl shadow-md w-full h-48 object-cover">
+                        </div>
+                        <div class="w-full md:w-2/3">
+                            <h3 class="text-xl font-semibold mb-2 text-primary">Programme d'Autonomisation des Femmes</h3>
+                            <p class="text-gray-600 mb-4">Formation et accompagnement des femmes entrepreneures dans le développement de leurs projets.</p>
+                            <ul class="list-disc list-inside text-sm space-y-1 text-gray-600">
+                                <li>Formation en gestion d'entreprise</li>
+                                <li>Accès au microcrédit</li>
+                                <li>Mentorat et networking</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Initiative 2 -->
+                <div class="glass rounded-2xl p-6 md:p-8 hover-lift fade-in">
+                    <div class="flex flex-col md:flex-row gap-6 items-center">
+                        <div class="w-full md:w-1/3">
+                            <img src="{% static 'images/initiative2.jpg' %}" alt="Initiative 2" class="rounded-xl shadow-md w-full h-48 object-cover">
+                        </div>
+                        <div class="w-full md:w-2/3">
+                            <h3 class="text-xl font-semibold mb-2 text-primary">Projet de Développement Local</h3>
+                            <p class="text-gray-600 mb-4">Amélioration des infrastructures de base et promotion du développement communautaire.</p>
+                            <ul class="list-disc list-inside text-sm space-y-1 text-gray-600">
+                                <li>Construction d'écoles et de centres de santé</li>
+                                <li>Accès à l'eau potable</li>
+                                <li>Développement des routes rurales</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Initiative 3 -->
+                <div class="glass rounded-2xl p-6 md:p-8 hover-lift fade-in">
+                    <div class="flex flex-col md:flex-row gap-6 items-center">
+                        <div class="w-full md:w-1/3">
+                            <img src="{% static 'images/initiative3.jpg' %}" alt="Initiative 3" class="rounded-xl shadow-md w-full h-48 object-cover">
+                        </div>
+                        <div class="w-full md:w-2/3">
+                            <h3 class="text-xl font-semibold mb-2 text-primary">Programme de Formation des Jeunes Leaders</h3>
+                            <p class="text-gray-600 mb-4">Formation et accompagnement des jeunes leaders pour un engagement politique responsable.</p>
+                            <ul class="list-disc list-inside text-sm space-y-1 text-gray-600">
+                                <li>Formation en leadership politique</li>
+                                <li>Développement de projets communautaires</li>
+                                <li>Mentorat par des leaders expérimentés</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-12 md:py-16 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto text-center fade-in">
+            <h2 class="text-2xl md:text-3xl font-serif text-primary mb-6">
+                <i class="fas fa-handshake mr-2"></i> Ensemble pour le Changement
+            </h2>
+            <p class="text-base md:text-lg mb-8">
+                Rejoignez-moi dans cette vision d'un Congo plus prospère et plus inclusif. Ensemble, nous pouvons créer un avenir meilleur pour tous.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="{% url 'portefolio:contact' %}" class="bg-primary text-white px-6 py-3 rounded-full hover:bg-opacity-90 transition-colors flex items-center animated-button tap-highlight active-state">
+                    <i class="fas fa-envelope mr-2"></i> Me contacter
+                </a>
+                <a href="#" class="bg-accent text-white px-6 py-3 rounded-full hover:bg-opacity-90 transition-colors flex items-center animated-button tap-highlight active-state">
+                    <i class="fas fa-users mr-2"></i> Rejoindre le Mouvement
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Animation des éléments au scroll
+    const animateOnScroll = function() {
+        const elements = document.querySelectorAll('.fade-in');
+        elements.forEach(element => {
+            const position = element.getBoundingClientRect();
+            if(position.top < window.innerHeight - 100 && position.bottom >= 0) {
+                element.classList.add('visible');
+            }
+        });
+    };
+    
+    window.addEventListener('scroll', animateOnScroll, { passive: true });
+    animateOnScroll();
+    
+    document.querySelectorAll('.fade-in').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    });
+    
+    function makeVisible(el) {
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+    }
+    
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    makeVisible(entry.target);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+    } else {
+        document.querySelectorAll('.fade-in').forEach(el => {
+            makeVisible(el);
+        });
+    }
+
+    document.querySelectorAll('.tap-highlight').forEach(el => {
+        el.addEventListener('touchstart', function() {
+            this.style.transform = 'scale(0.98)';
+            this.style.opacity = '0.9';
+        }, { passive: true });
+        
+        el.addEventListener('touchend', function() {
+            this.style.transform = '';
+            this.style.opacity = '';
+        }, { passive: true });
+    });
+});
+</script>
+{% endblock %}
+{% endblock %} 

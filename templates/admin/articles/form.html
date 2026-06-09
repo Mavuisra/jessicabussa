@@ -1,0 +1,120 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <!-- Page header -->
+    <div class="flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-gray-800">
+            {% if form.instance.pk %}Modifier l'article{% else %}Nouvel article{% endif %}
+        </h1>
+        <a href="{% url 'portefolio:admin_articles' %}" class="text-gray-600 hover:text-primary">
+            <i class="fas fa-arrow-left mr-2"></i>Retour à la liste
+        </a>
+    </div>
+
+    <!-- Article form -->
+    <div class="bg-white rounded-xl shadow-sm">
+        <form method="post" enctype="multipart/form-data" class="p-6 space-y-6">
+            {% csrf_token %}
+            
+            <!-- Title and slug -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="{{ form.title.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Titre</label>
+                    {{ form.title }}
+                    {% if form.title.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.title.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.slug.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Slug</label>
+                    {{ form.slug }}
+                    {% if form.slug.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.slug.errors.0 }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Category and status -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="{{ form.category.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Catégorie</label>
+                    {{ form.category }}
+                    {% if form.category.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.category.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.status.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Statut</label>
+                    {{ form.status }}
+                    {% if form.status.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.status.errors.0 }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Featured image -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Image à la une</label>
+                <div class="mt-1 flex items-center space-x-4">
+                    {% if form.instance.featured_image %}
+                    <img src="{{ form.instance.featured_image.url }}" alt="Current featured image" class="w-32 h-32 object-cover rounded-lg">
+                    {% endif %}
+                    <div class="flex-1">
+                        {{ form.featured_image }}
+                    </div>
+                </div>
+                {% if form.featured_image.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ form.featured_image.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Excerpt -->
+            <div>
+                <label for="{{ form.excerpt.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Extrait</label>
+                {{ form.excerpt }}
+                {% if form.excerpt.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ form.excerpt.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Content -->
+            <div>
+                <label for="{{ form.content.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Contenu</label>
+                {{ form.content }}
+                {% if form.content.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ form.content.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Form actions -->
+            <div class="flex justify-end space-x-4">
+                <a href="{% url 'portefolio:admin_articles' %}" class="px-4 py-2 border rounded-lg hover:bg-gray-50">Annuler</a>
+                <button type="submit" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90">
+                    {% if form.instance.pk %}Mettre à jour{% else %}Créer{% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-generate slug from title
+    const titleInput = document.getElementById('{{ form.title.id_for_label }}');
+    const slugInput = document.getElementById('{{ form.slug.id_for_label }}');
+    
+    titleInput.addEventListener('input', function() {
+        if (!slugInput.value) {
+            slugInput.value = titleInput.value
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/(^-|-$)/g, '');
+        }
+    });
+});
+</script>
+{% endblock %}
+{% endblock %} 

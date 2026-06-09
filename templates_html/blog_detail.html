@@ -1,0 +1,1008 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ post.title }} - Jessica Bussa{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Variables de couleur pour cohérence */
+    :root {
+        --color-primary-light: rgba(159, 122, 234, 0.1);
+        --color-primary-medium: rgba(159, 122, 234, 0.5);
+        --color-primary-dark: rgba(126, 87, 194, 0.8);
+    }
+
+    /* Typographie avec interlignes réduites */
+    .blog-content {
+        font-size: 1.125rem;
+        line-height: 1.8;
+        color: #424242;
+        text-align: left;
+    }
+
+    @media (max-width: 768px) {
+        .blog-content {
+            font-size: 1rem;
+            line-height: 1.6;
+            padding: 0 0.5rem;
+        }
+
+        .blog-content p {
+            margin-bottom: 0.5rem;
+        }
+    }
+
+    .blog-content p {
+        margin-bottom: 0.6rem;
+        line-height: 1.7;
+    }
+
+    /* Styles pour le contenu HTML riche (Quill) avec interlignes réduites */
+    .blog-content h1, .blog-content h2, .blog-content h3, .blog-content h4, .blog-content h5, .blog-content h6 {
+        font-family: "Times New Roman", Times, serif
+        font-weight: 600;
+        margin-top: 0.8rem;
+        margin-bottom: 0.4rem;
+        color: #1a202c;
+        line-height: 1.2;
+    }
+
+    .blog-content h1 {
+        font-size: 2.5rem;
+        border-bottom: 3px solid var(--color-primary-medium);
+        padding-bottom: 0.3rem;
+        line-height: 1.2;
+    }
+
+    .blog-content h2 {
+        font-size: 1.7rem;
+        color: var(--color-primary-dark);
+        line-height: 1.2;
+    }
+
+    .blog-content h3 {
+        font-size: 1.5rem;
+        color: var(--color-primary-dark);
+        line-height: 1.3;
+    }
+
+    .blog-content blockquote {
+        border-left: 4px solid var(--color-primary-medium);
+        padding-left: 1rem;
+        margin: 0.8rem 0;
+        font-style: italic;
+        background: var(--color-primary-light);
+        padding: 0.8rem;
+        border-radius: 0.5rem;
+        line-height: 1.5;
+    }
+
+    .blog-content ul, .blog-content ol {
+        margin: 0.6rem 0;
+        padding-left: 2rem;
+        line-height: 0.8;
+    }
+
+    .blog-content li {
+        margin-bottom: 0.2rem;
+        line-height: 1.6;
+    }
+
+    .blog-content a {
+        color: var(--color-primary-dark);
+        text-decoration: underline;
+        transition: color 0.3s ease;
+    }
+
+    .blog-content a:hover {
+        color: var(--color-primary-medium);
+    }
+
+    .blog-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        margin: 0.8rem 0;
+    }
+
+    .blog-content code {
+        background: #f7fafc;
+        padding: 0.15rem 0.3rem;
+        border-radius: 0.25rem;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9em;
+        line-height: 1.4;
+    }
+
+    .blog-content pre {
+        background: #1a202c;
+        color: white;
+        padding: 0.8rem;
+        border-radius: 0.5rem;
+        overflow-x: auto;
+        margin: 0.8rem 0;
+        line-height: 0.8;
+    }
+
+    .blog-content pre code {
+        background: none;
+        padding: 0;
+        color: inherit;
+        line-height: 0.8;
+    }
+
+    .blog-content strong {
+        font-weight: 500;
+        color: black;
+    }
+
+    /* Ajustements responsifs pour boutons et sections */
+    @media (max-width: 768px) {
+        .mobile-center {
+            text-align: center;
+            justify-content: center;
+        }
+
+        .mobile-full {
+            width: 100%;
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        .mobile-stack {
+            flex-direction: column !important;
+            align-items: center !important;
+        }
+
+        .mobile-stack > * {
+            margin-bottom: 0.5rem;
+        }
+
+        .mobile-smaller-text {
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .mobile-smaller-heading {
+            font-size: 1.5rem !important;
+            line-height: 1.5 !important;
+        }
+
+        .mobile-compact-padding {
+            padding: 0.8rem !important;
+        }
+
+        .mobile-top-spacing {
+            margin-top: 0.3rem !important;
+        }
+    }
+
+    /* Animation pour les titres avec soulignement progressif */
+    .title-underline {
+        display: inline-block;
+        position: relative;
+    }
+
+    .title-underline::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--color-primary-medium), transparent);
+        transition: width 0.6s ease-out;
+    }
+
+    .title-underline.animated::after {
+        width: 100%;
+    }
+
+    /* Effets de parallax et animations avancées */
+    .parallax-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-position: center;
+        background-size: cover;
+        transform: translateZ(-10px) scale(2);
+        z-index: -1;
+    }
+
+    .scroll-reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .scroll-reveal.revealed {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Améliorations du hero avec overlay avancé */
+    .hero-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 70%;
+        background: linear-gradient(to top,
+            rgba(15, 23, 42, 0.8) 0%,
+            rgba(15, 23, 42, 0.6) 30%,
+            rgba(15, 23, 42, 0.3) 60%,
+            rgba(15, 23, 42, 0) 100%);
+        z-index: 1;
+    }
+
+    /* Effets de glassmorphism et blur améliorés */
+    .glass-elite {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Améliorations pour les images et conteneurs */
+    .blog-image-container {
+        position: relative;
+        overflow: hidden;
+        border-radius: 20px;
+        box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.25), 0 18px 36px -18px rgba(0, 0, 0, 0.3);
+        transform: perspective(1000px) rotateX(2deg);
+        transition: all 0.7s ease;
+    }
+
+    .blog-image-container:hover {
+        transform: perspective(1000px) rotateX(0deg);
+    }
+
+    .blog-image {
+        transition: transform 0.9s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .blog-image-container:hover .blog-image {
+        transform: scale(1.08);
+    }
+
+    /* Effets d'ombre dynamiques pour les cartes */
+    .dynamic-shadow {
+        position: relative;
+    }
+
+    .dynamic-shadow::after {
+        content: '';
+        position: absolute;
+        top: 10%;
+        left: 5%;
+        width: 90%;
+        height: 85%;
+        border-radius: inherit;
+        background: rgba(0, 0, 0, 0.15);
+        filter: blur(20px);
+        z-index: -1;
+        opacity: 0;
+        transform: translateY(10px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .dynamic-shadow:hover::after {
+        opacity: 1;
+        transform: translateY(20px);
+    }
+
+    /* Animation de brillance pour les boutons */
+    .btn-shine {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-shine::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.3) 50%,
+            rgba(255, 255, 255, 0) 100%
+        );
+        transform: rotate(30deg);
+        transition: transform 0.7s ease-in-out;
+        z-index: 1;
+        opacity: 0;
+    }
+
+    .btn-shine:hover::before {
+        transform: rotate(30deg) translate(100%, -100%);
+        opacity: 1;
+    }
+
+    /* Animations pour interactions */
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.15); }
+        100% { transform: scale(1); }
+    }
+
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+
+    .float-animation {
+        animation: float 3s ease-in-out infinite;
+    }
+
+    .pulse-animation {
+        animation: pulse 0.6s cubic-bezier(0.4, 0, 0.6, 1);
+    }
+
+    /* Améliorations pour les commentaires */
+    .comment-card {
+        transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+        border-left: 4px solid transparent;
+        transform-origin: center left;
+    }
+
+    .comment-card:hover {
+        border-left-color: #9f7aea;
+        transform: translateX(8px) scale(1.02);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    /* Effet de particules */
+    .particles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 0;
+    }
+
+    .particle {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        pointer-events: none;
+    }
+
+    /* Scroll progression */
+    .progress-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: transparent;
+        z-index: 9999;
+    }
+
+    .progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #9f7aea, #f687b3);
+        width: 0%;
+        transition: width 0.1s ease;
+    }
+
+    /* Inputs améliorés */
+    .elevated-input {
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+        background-color: #f9fafb;
+    }
+
+    .elevated-input:focus {
+        transform: translateY(-2px);
+        border-color: #9f7aea;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Séparateurs stylisés */
+    .stylish-divider {
+        position: relative;
+        height: 1px;
+        background-color: #e5e7eb;
+        margin: 1.5rem 0;
+    }
+
+    .stylish-divider::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 40px;
+        height: 40px;
+        background-color: white;
+        border-radius: 50%;
+        box-shadow: 0 0 0 8px white;
+    }
+
+    .stylish-divider::after {
+        content: '✦';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #9f7aea;
+        font-size: 1.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Indicateur de progression de lecture -->
+<div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+</div>
+
+<!-- Hero Section immersif -->
+<section class="relative bg-primary py-20 md:py-32 overflow-hidden">
+    <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-secondary/30 rounded-full blur-3xl opacity-60"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-accent/30 rounded-full blur-3xl opacity-60"></div>
+        <div class="absolute top-1/3 left-1/4 w-60 h-60 bg-white/10 rounded-full blur-2xl opacity-30"></div>
+    </div>
+
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="text-center text-white">
+            <div class="flex justify-center mb-8 float-animation">
+                <a href="{% url 'portefolio:blog' %}" class="glass-elite text-white px-8 py-3 rounded-full hover:bg-white/40 transition-all flex items-center space-x-3 btn-shine">
+                    <i class="fas fa-arrow-left text-lg"></i>
+                    <span class="font-medium">Retour au blog</span>
+                </a>
+            </div>
+
+            <h1 class="text-3xl md:text-5xl lg:text-6xl font-serif font-bold mb-8 leading-tight text-shadow-lg max-w-5xl mx-auto">
+                <span class="title-underline" id="mainTitle">{{ post.title }}</span>
+            </h1>
+
+            <div class="flex flex-wrap items-center justify-center gap-6 text-sm font-medium">
+                <span class="flex items-center space-x-2 glass-elite px-4 py-2 rounded-full">
+                    <i class="far fa-calendar-alt text-secondary"></i>
+                    <span>{{ post.created_at|date:"d F Y" }}</span>
+                </span>
+                <span class="flex items-center space-x-2 glass-elite px-4 py-2 rounded-full">
+                    <i class="far fa-eye text-secondary"></i>
+                    <span id="viewsCounter">{{ post.views }} vues</span>
+                </span>
+                <span class="flex items-center space-x-2 glass-elite px-4 py-2 rounded-full">
+                    <i class="fas fa-users text-secondary"></i>
+                    <span>{{ article_stats.unique_visitors }} visiteurs uniques</span>
+                </span>
+                <span class="flex items-center space-x-2 glass-elite px-4 py-2 rounded-full">
+                    <i class="far fa-clock text-secondary"></i>
+                    <span>5 min de lecture</span>
+                </span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Blog Content Section avec design élégant -->
+<section class="py-16 md:py-24 bg-light relative">
+    <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto relative">
+            {% if post.featured_image %}
+            <div class="blog-image-container -mt-32 md:-mt-32 mb-12 md:mb-16 z-10 dynamic-shadow">
+                <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="blog-image w-full h-auto" id="featuredImage">
+                <div class="hero-overlay"></div>
+            </div>
+            {% endif %}
+
+            <!-- Contenu principal avec design amélioré -->
+            <article class="space-y-4 md:space-y-6">
+                <div class="prose prose-lg max-w-none blog-content scroll-reveal" id="blogContent">
+                    {{ post.content|safe }}
+                </div>
+
+                <!-- Tags et catégories -->
+                <div class="flex flex-wrap gap-2 mt-6 md:mt-8 scroll-reveal mobile-center">
+                    <span class="bg-primary/10 text-primary px-4 py-1 rounded-full text-sm font-medium">{{ post.get_category_display }}</span>
+                    {% if post.status == 'published' %}
+                    <span class="bg-green-100 text-green-700 px-4 py-1 rounded-full text-sm font-medium">Publié</span>
+                    {% else %}
+                    <span class="bg-yellow-100 text-yellow-700 px-4 py-1 rounded-full text-sm font-medium">Brouillon</span>
+                    {% endif %}
+                </div>
+
+                <div class="stylish-divider scroll-reveal"></div>
+
+                <!-- Profil de l'auteur -->
+                <div class="glass-elite p-4 md:p-8 rounded-xl shadow-lg flex flex-col md:flex-row items-center gap-4 md:gap-6 scroll-reveal mobile-compact-padding">
+                    <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center text-primary flex-shrink-0">
+                        <i class="fas fa-user-circle text-3xl"></i>
+                    </div>
+                    <div class="text-center md:text-left mobile-center">
+                        <h3 class="text-xl font-serif font-semibold mb-2">Jessica Bussa</h3>
+                        <p class="text-gray-600 mb-3 mobile-smaller-text">Entrepreneuse, philanthrope et activiste passionnée par l'impact social et l'émancipation des femmes en Afrique.</p>
+                        <div class="flex space-x-3 justify-center md:justify-start">
+                            <a href="#" class="text-primary hover:text-primary-dark transition-colors"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="text-primary hover:text-primary-dark transition-colors"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="text-primary hover:text-primary-dark transition-colors"><i class="fas fa-globe"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social Interactions avec animations -->
+                <div class="mt-8 md:mt-12 glass-elite p-4 md:p-8 rounded-2xl shadow-lg scroll-reveal mobile-compact-padding">
+                    <h3 class="text-xl font-serif font-semibold mb-4 md:mb-6 flex items-center title-underline animated mobile-center">
+                        <i class="fas fa-share-alt mr-3 text-primary"></i>
+                        Interagir avec cet article
+                    </h3>
+
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 md:gap-8">
+                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 md:gap-6">
+                            <button id="like-btn" onclick="likePost('{{ post.slug }}')" class="glass-elite flex flex-col items-center justify-center w-20 md:w-24 h-20 md:h-24 rounded-xl hover:bg-primary/5 transition-all btn-shine {% if visitor_stats.has_liked %}bg-pink-50 border-pink-200{% endif %}">
+                                <i class="{% if visitor_stats.has_liked %}fas{% else %}far{% endif %} fa-heart text-2xl md:text-3xl mb-1 md:mb-2 text-pink-500"></i>
+                                <span id="likes-count" class="text-lg font-medium">{{ post.likes }}</span>
+                                <span class="text-xs text-gray-500">J'aime</span>
+                            </button>
+
+                            <button id="share-btn" onclick="sharePost('{{ post.slug }}')" class="glass-elite flex flex-col items-center justify-center w-20 md:w-24 h-20 md:h-24 rounded-xl hover:bg-primary/5 transition-all btn-shine {% if visitor_stats.has_shared %}bg-blue-50 border-blue-200{% endif %}">
+                                <i class="fas fa-share-alt text-2xl md:text-3xl mb-1 md:mb-2 text-blue-500"></i>
+                                <span id="shares-count" class="text-lg font-medium">{{ post.shares }}</span>
+                                <span class="text-xs text-gray-500">Partages</span>
+                            </button>
+
+                            <a href="#comments" class="glass-elite flex flex-col items-center justify-center w-20 md:w-24 h-20 md:h-24 rounded-xl hover:bg-primary/5 transition-all btn-shine">
+                                <i class="far fa-comment-dots text-2xl md:text-3xl mb-1 md:mb-2 text-primary"></i>
+                                <span class="text-lg font-medium">{{ comments|length }}</span>
+                                <span class="text-xs text-gray-500">Commentaires</span>
+                            </a>
+                        </div>
+
+                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 md:gap-3 mobile-top-spacing">
+                            <span class="text-sm text-gray-500 w-full md:w-auto text-center md:text-left mb-2 md:mr-2 md:mb-0">Partager sur :</span>
+                            <div class="flex justify-center gap-2 flex-wrap">
+                                <!-- Facebook avec image -->
+                                <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}&picture={% if post.featured_image %}{{ request.build_absolute_uri|slice:':-1' }}{{ post.featured_image.url }}{% endif %}&title={{ post.title|urlencode }}&description={{ post.excerpt|default:post.title|urlencode }}"
+                                   target="_blank"
+                                   class="w-10 md:w-12 h-10 md:h-12 flex items-center justify-center rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-colors hover:scale-110 transform duration-200"
+                                   title="Partager sur Facebook">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+
+                                <!-- Twitter/X avec image -->
+                                <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text={{ post.title|urlencode }}&via=jessicabussa{% if post.featured_image %}&media={{ request.build_absolute_uri|slice:':-1' }}{{ post.featured_image.url }}{% endif %}"
+                                   target="_blank"
+                                   class="w-10 md:w-12 h-10 md:h-12 flex items-center justify-center rounded-full bg-black text-white hover:bg-gray-800 transition-colors hover:scale-110 transform duration-200"
+                                   title="Partager sur X (Twitter)">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+
+                                <!-- LinkedIn avec image -->
+                                <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri }}&title={{ post.title|urlencode }}&summary={{ post.excerpt|default:post.title|urlencode }}{% if post.featured_image %}&media={{ request.build_absolute_uri|slice:':-1' }}{{ post.featured_image.url }}{% endif %}"
+                                   target="_blank"
+                                   class="w-10 md:w-12 h-10 md:h-12 flex items-center justify-center rounded-full bg-blue-700 text-white hover:bg-blue-800 transition-colors hover:scale-110 transform duration-200"
+                                   title="Partager sur LinkedIn">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+
+                                <!-- WhatsApp avec image -->
+                                <a href="https://api.whatsapp.com/send?text={{ post.title|urlencode }} - {{ request.build_absolute_uri }}"
+                                   target="_blank"
+                                   class="w-10 md:w-12 h-10 md:h-12 flex items-center justify-center rounded-full bg-green-500 text-white hover:bg-green-600 transition-colors hover:scale-110 transform duration-200"
+                                   title="Partager sur WhatsApp">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+
+                                <!-- Telegram -->
+                                <a href="https://t.me/share/url?url={{ request.build_absolute_uri }}&text={{ post.title|urlencode }}"
+                                   target="_blank"
+                                   class="w-10 md:w-12 h-10 md:h-12 flex items-center justify-center rounded-full bg-blue-400 text-white hover:bg-blue-500 transition-colors hover:scale-110 transform duration-200"
+                                   title="Partager sur Telegram">
+                                    <i class="fab fa-telegram-plane"></i>
+                                </a>
+
+                                <!-- Pinterest avec image -->
+                                {% if post.featured_image %}
+                                <a href="https://pinterest.com/pin/create/button/?url={{ request.build_absolute_uri }}&media={{ request.build_absolute_uri|slice:':-1' }}{{ post.featured_image.url }}&description={{ post.title|urlencode }}"
+                                   target="_blank"
+                                   class="w-10 md:w-12 h-10 md:h-12 flex items-center justify-center rounded-full bg-red-500 text-white hover:bg-red-600 transition-colors hover:scale-110 transform duration-200"
+                                   title="Épingler sur Pinterest">
+                                    <i class="fab fa-pinterest-p"></i>
+                                </a>
+                                {% endif %}
+
+                                <!-- Email -->
+                                <a href="mailto:?subject={{ post.title|urlencode }}&body={{ post.title|urlencode }} - {{ request.build_absolute_uri }}"
+                                   class="w-10 md:w-12 h-10 md:h-12 flex items-center justify-center rounded-full bg-gray-600 text-white hover:bg-gray-700 transition-colors hover:scale-110 transform duration-200"
+                                   title="Partager par email">
+                                    <i class="fas fa-envelope"></i>
+                                </a>
+
+                                <!-- Copier le lien -->
+                                <button onclick="copyToClipboard('{{ request.build_absolute_uri }}')"
+                                        class="w-10 md:w-12 h-10 md:h-12 flex items-center justify-center rounded-full bg-purple-500 text-white hover:bg-purple-600 transition-colors hover:scale-110 transform duration-200"
+                                        title="Copier le lien">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comments Section avec design moderne -->
+                <div class="mt-12 md:mt-16 scroll-reveal" id="comments">
+                    <h3 class="text-2xl font-serif font-semibold mb-4 md:mb-6 flex items-center title-underline animated mobile-center mobile-smaller-heading">
+                        <i class="far fa-comments mr-3 text-primary"></i>
+                        Commentaires ({{ comments|length }})
+                    </h3>
+
+                    {% if comments %}
+                    <div class="space-y-3 md:space-y-4 mb-6 md:mb-8">
+                        {% for comment in comments %}
+                        <div class="comment-card glass-elite p-4 md:p-6 rounded-xl shadow-md">
+                            <div class="flex items-center justify-between mb-2 md:mb-3 flex-wrap gap-2">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 md:w-12 md:h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary mr-3">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-lg text-primary">{{ comment.name }}</h4>
+                                        <span class="text-xs md:text-sm text-gray-500">{{ comment.created_at|date:"d F Y à H:i" }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-gray-700 text-sm md:text-base line-height-0.8">{{ comment.content }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="glass-elite p-6 md:p-10 rounded-xl text-center mb-6 md:mb-8">
+                        <div class="w-16 h-16 md:w-20 md:h-20 mx-auto bg-primary/10 rounded-full flex items-center justify-center text-primary mb-4 float-animation">
+                            <i class="far fa-comment-dots text-2xl md:text-3xl"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold mb-2">Aucun commentaire</h4>
+                        <p class="text-gray-600 max-w-md mx-auto text-sm md:text-base">Soyez le premier à partager vos réflexions sur cet article et à enrichir la conversation !</p>
+                    </div>
+                    {% endif %}
+
+                    <!-- Comment Form avec design moderne -->
+                    <div class="glass-elite p-4 md:p-8 rounded-xl shadow-lg">
+                        <h4 class="text-xl font-semibold mb-4 md:mb-6 flex items-center title-underline animated mobile-center">
+                            <i class="fas fa-pen-fancy mr-3 text-primary"></i>
+                            Laisser un commentaire
+                        </h4>
+                        <form method="post" class="space-y-3 md:space-y-4">
+                            {% csrf_token %}
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                                <div>
+                                    <label for="id_name" class="block text-sm font-medium text-gray-700 mb-1 md:mb-2">Votre nom</label>
+                                    {{ comment_form.name|safe }}
+                                </div>
+                                <div>
+                                    <label for="id_email" class="block text-sm font-medium text-gray-700 mb-1 md:mb-2">Votre email</label>
+                                    {{ comment_form.email|safe }}
+                                </div>
+                            </div>
+                            <div>
+                                <label for="id_content" class="block text-sm font-medium text-gray-700 mb-1 md:mb-2">Votre commentaire</label>
+                                {{ comment_form.content|safe }}
+                            </div>
+                            <div class="flex justify-center md:justify-start">
+                                <button type="submit" class="btn-shine glass-elite bg-primary text-white px-6 md:px-8 py-3 md:py-4 rounded-full hover:bg-opacity-90 transition-all flex items-center justify-center space-x-2 text-base md:text-lg">
+                                    <i class="fas fa-paper-plane"></i>
+                                    <span>Publier</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+<!-- Call to action pour newsletter -->
+<section class="py-16 bg-gradient-to-r from-primary/20 to-secondary/20 relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-72 h-72 bg-primary/10 rounded-full blur-3xl opacity-60"></div>
+    <div class="absolute bottom-0 left-0 w-72 h-72 bg-secondary/10 rounded-full blur-3xl opacity-60"></div>
+
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="max-w-3xl mx-auto glass-elite p-10 rounded-2xl shadow-xl">
+            <div class="text-center">
+                <div class="w-20 h-20 mx-auto bg-primary/10 rounded-full flex items-center justify-center mb-6 float-animation">
+                    <i class="fas fa-envelope-open-text text-2xl text-primary"></i>
+                </div>
+                <h2 class="text-2xl md:text-3xl font-serif font-semibold mb-4">
+                    Ne manquez aucun article
+                </h2>
+                <p class="text-gray-600 mb-8 max-w-xl mx-auto line-height-0.8">
+                    Abonnez-vous à ma newsletter pour être informé des dernières publications
+                    et actualités directement dans votre boîte de réception.
+                </p>
+                <form class="flex flex-col md:flex-row gap-4 max-w-md mx-auto">
+                    <input type="email" placeholder="Votre adresse email" class="elevated-input flex-1 px-5 py-4 rounded-full border focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent shadow-sm">
+                    <button type="submit" class="btn-shine bg-primary text-white px-8 py-4 rounded-full hover:bg-primary/90 transition-colors flex items-center justify-center space-x-2">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>S'abonner</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% block extra_js %}
+<script>
+// Animation du titre principal et initialisation sécurisée
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Blog detail script loaded');
+
+    // Animation du titre principal
+    const mainTitle = document.getElementById('mainTitle');
+    if (mainTitle) {
+        setTimeout(() => {
+            mainTitle.classList.add('animated');
+        }, 500);
+    }
+
+    // Barre de progression avec protection
+    initProgressBar();
+
+    // Animation des éléments au scroll de manière sécurisée
+    try {
+        initScrollAnimations();
+    } catch (e) {
+        console.error('Error initializing scroll animations:', e);
+    }
+});
+
+// Barre de progression de lecture simplifiée
+function initProgressBar() {
+    const progressBar = document.getElementById('progressBar');
+    if (!progressBar) return;
+
+    // Fonction de mise à jour de la barre
+    function updateProgressBar() {
+        const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        if (height > 0) {
+            const scrolled = (winScroll / height) * 100;
+            progressBar.style.width = scrolled + '%';
+        }
+    }
+
+    // Écouter l'événement scroll avec throttling pour les performances
+    let isScrolling = false;
+    window.addEventListener('scroll', function() {
+        if (!isScrolling) {
+            window.requestAnimationFrame(function() {
+                updateProgressBar();
+                isScrolling = false;
+            });
+            isScrolling = true;
+        }
+    });
+
+    // Initialisation
+    updateProgressBar();
+}
+
+// Animations au défilement simplifiées
+function initScrollAnimations() {
+    const elementsToAnimate = document.querySelectorAll('.scroll-reveal');
+    if (elementsToAnimate.length === 0) return;
+
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                    // Désinscrire l'élément une fois qu'il est révélé
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        elementsToAnimate.forEach(element => {
+            observer.observe(element);
+        });
+    } else {
+        // Fallback pour les navigateurs qui ne supportent pas IntersectionObserver
+        elementsToAnimate.forEach(element => {
+            element.classList.add('revealed');
+        });
+    }
+}
+
+// Amélioration des animations d'interaction
+function likePost(slug) {
+    const likeBtn = document.getElementById('like-btn');
+    if (!likeBtn) return;
+
+    likeBtn.classList.add('pulse-animation');
+
+    fetch(`/blog/${slug}/like/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const likesCount = document.getElementById('likes-count');
+        if (likesCount) {
+            likesCount.textContent = data.likes;
+        }
+
+        // Mettre à jour l'état visuel du bouton
+        const heartIcon = likeBtn.querySelector('i');
+        if (data.success) {
+            heartIcon.classList.remove('far');
+            heartIcon.classList.add('fas');
+            likeBtn.classList.add('bg-pink-50', 'border-pink-200');
+            showNotification(data.message, 'success');
+        } else {
+            showNotification(data.message, 'warning');
+        }
+
+        setTimeout(() => {
+            likeBtn.classList.remove('pulse-animation');
+        }, 600);
+    })
+    .catch(error => {
+        console.error('Error liking post:', error);
+        likeBtn.classList.remove('pulse-animation');
+        showNotification('Erreur lors du like', 'error');
+    });
+}
+
+function sharePost(slug) {
+    const shareBtn = document.getElementById('share-btn');
+    if (!shareBtn) return;
+
+    shareBtn.classList.add('pulse-animation');
+
+    fetch(`/blog/${slug}/share/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const sharesCount = document.getElementById('shares-count');
+        if (sharesCount) {
+            sharesCount.textContent = data.shares;
+        }
+
+        // Mettre à jour l'état visuel du bouton
+        if (data.success) {
+            shareBtn.classList.add('bg-blue-50', 'border-blue-200');
+            showNotification(data.message, 'success');
+        } else {
+            showNotification(data.message, 'warning');
+        }
+
+        setTimeout(() => {
+            shareBtn.classList.remove('pulse-animation');
+        }, 600);
+    })
+    .catch(error => {
+        console.error('Error sharing post:', error);
+        shareBtn.classList.remove('pulse-animation');
+        showNotification('Erreur lors du partage', 'error');
+    });
+}
+
+// Fonction pour copier le lien dans le presse-papiers
+function copyToClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+        // Utiliser l'API moderne Clipboard
+        navigator.clipboard.writeText(text).then(() => {
+            showCopyNotification('Lien copié dans le presse-papiers !');
+        }).catch(err => {
+            console.error('Erreur lors de la copie:', err);
+            fallbackCopyTextToClipboard(text);
+        });
+    } else {
+        // Fallback pour les navigateurs plus anciens
+        fallbackCopyTextToClipboard(text);
+    }
+}
+
+// Fonction de fallback pour copier le texte
+function fallbackCopyTextToClipboard(text) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+
+    // Éviter le défilement vers le bas
+    textArea.style.top = "0";
+    textArea.style.left = "0";
+    textArea.style.position = "fixed";
+    textArea.style.opacity = "0";
+
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+            showCopyNotification('Lien copié dans le presse-papiers !');
+        } else {
+            showCopyNotification('Impossible de copier le lien', 'error');
+        }
+    } catch (err) {
+        console.error('Erreur lors de la copie:', err);
+        showCopyNotification('Impossible de copier le lien', 'error');
+    }
+
+    document.body.removeChild(textArea);
+}
+
+// Fonction pour afficher une notification de copie
+function showCopyNotification(message, type = 'success') {
+    showNotification(message, type);
+}
+
+// Fonction générale pour afficher des notifications
+function showNotification(message, type = 'success') {
+    // Créer l'élément de notification
+    const notification = document.createElement('div');
+
+    let bgColor, icon;
+    switch(type) {
+        case 'success':
+            bgColor = 'bg-green-500 text-white';
+            icon = 'fa-check-circle';
+            break;
+        case 'warning':
+            bgColor = 'bg-yellow-500 text-white';
+            icon = 'fa-exclamation-triangle';
+            break;
+        case 'error':
+            bgColor = 'bg-red-500 text-white';
+            icon = 'fa-exclamation-circle';
+            break;
+        default:
+            bgColor = 'bg-blue-500 text-white';
+            icon = 'fa-info-circle';
+    }
+
+    notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 translate-x-full ${bgColor}`;
+    notification.innerHTML = `
+        <div class="flex items-center space-x-2">
+            <i class="fas ${icon}"></i>
+            <span>${message}</span>
+        </div>
+    `;
+
+    // Ajouter au DOM
+    document.body.appendChild(notification);
+
+    // Animation d'entrée
+    setTimeout(() => {
+        notification.classList.remove('translate-x-full');
+    }, 100);
+
+    // Supprimer après 4 secondes
+    setTimeout(() => {
+        notification.classList.add('translate-x-full');
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    }, 4000);
+}
+</script>
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails Campagne Email - Administration</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4F46E5;
+            --secondary-color: #7C3AED;
+        }
+        .bg-primary { background-color: var(--primary-color); }
+        .text-primary { color: var(--primary-color); }
+        .sidebar {
+            width: 250px;
+            transition: all 0.3s ease;
+        }
+        .main-content {
+            margin-left: 250px;
+            transition: all 0.3s ease;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 0;
+                overflow: hidden;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .sidebar.active {
+                width: 250px;
+            }
+            .main-content.active {
+                margin-left: 250px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Sidebar -->
+    <aside class="sidebar fixed top-0 left-0 h-full bg-white shadow-lg z-10">
+        <div class="p-4 border-b">
+            <div class="flex items-center justify-between">
+                <h1 class="text-xl font-bold text-primary">Administration</h1>
+                <button id="toggle-sidebar" class="md:hidden text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        <nav class="p-4">
+            <ul class="space-y-2">
+                <li>
+                    <a href="{% url 'portefolio:admin_dashboard' %}" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg">
+                        <i class="fas fa-tachometer-alt w-6"></i>
+                        <span>Tableau de bord</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'portefolio:admin_articles' %}" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg">
+                        <i class="fas fa-newspaper w-6"></i>
+                        <span>Articles</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'portefolio:admin_events' %}" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg">
+                        <i class="fas fa-calendar-alt w-6"></i>
+                        <span>Événements</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'portefolio:admin_gallery' %}" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg">
+                        <i class="fas fa-images w-6"></i>
+                        <span>Galerie</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'portefolio:admin_contacts' %}" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg">
+                        <i class="fas fa-envelope w-6"></i>
+                        <span>Messages</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'portefolio:admin_newsletter' %}" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg">
+                        <i class="fas fa-newspaper w-6"></i>
+                        <span>Newsletter</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'portefolio:admin_campaigns' %}" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg bg-primary/10">
+                        <i class="fas fa-paper-plane w-6"></i>
+                        <span>Campagnes Email</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="absolute bottom-0 left-0 right-0 p-4 border-t">
+            <div class="flex items-center">
+                <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium text-gray-700">{{ request.user.username }}</p>
+                    <a href="{% url 'portefolio:admin_logout' %}" class="text-red-600 hover:text-red-800">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Déconnexion
+                    </a>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content min-h-screen p-6">
+        <!-- Header -->
+        <header class="mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800">{{ campaign.title }}</h1>
+                    <p class="text-gray-500">Détails de la campagne d'email</p>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="{% url 'portefolio:admin_campaigns' %}" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-arrow-left mr-2"></i>Retour à la liste
+                    </a>
+                    {% if campaign.status == 'draft' %}
+                    <button onclick="sendCampaign({{ campaign.pk }})" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-paper-plane mr-2"></i>Envoyer la Campagne
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Contenu de la campagne -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                    <div class="p-6 border-b border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-semibold text-gray-800">Contenu de l'Email</h3>
+                            <div class="flex space-x-2">
+                                {% if campaign.status == 'draft' %}
+                                <span class="inline-flex px-3 py-1 text-sm font-semibold rounded-full bg-orange-100 text-orange-800">Brouillon</span>
+                                {% elif campaign.status == 'scheduled' %}
+                                <span class="inline-flex px-3 py-1 text-sm font-semibold rounded-full bg-purple-100 text-purple-800">Programmé</span>
+                                {% elif campaign.status == 'sending' %}
+                                <span class="inline-flex px-3 py-1 text-sm font-semibold rounded-full bg-blue-100 text-blue-800">En cours</span>
+                                {% elif campaign.status == 'sent' %}
+                                <span class="inline-flex px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-800">Envoyé</span>
+                                {% elif campaign.status == 'cancelled' %}
+                                <span class="inline-flex px-3 py-1 text-sm font-semibold rounded-full bg-red-100 text-red-800">Annulé</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="mb-6">
+                            <h4 class="text-sm font-medium text-gray-500 mb-2">Sujet</h4>
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <p class="text-gray-800 font-medium">{{ campaign.subject }}</p>
+                            </div>
+                        </div>
+                        <div class="mb-6">
+                            <h4 class="text-sm font-medium text-gray-500 mb-2">Contenu</h4>
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <div class="text-gray-800 whitespace-pre-wrap">{{ campaign.content }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Informations et statistiques -->
+            <div class="space-y-6">
+                <!-- Informations générales -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                    <div class="p-6 border-b border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-800">Informations</h3>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div>
+                            <label class="text-sm font-medium text-gray-500">Créé par</label>
+                            <p class="text-gray-800">{{ campaign.created_by.username }}</p>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-gray-500">Date de création</label>
+                            <p class="text-gray-800">{{ campaign.created_at|date:"d/m/Y à H:i" }}</p>
+                        </div>
+                        {% if campaign.sent_at %}
+                        <div>
+                            <label class="text-sm font-medium text-gray-500">Date d'envoi</label>
+                            <p class="text-gray-800">{{ campaign.sent_at|date:"d/m/Y à H:i" }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Statistiques -->
+                {% if campaign.status == 'sent' %}
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                    <div class="p-6 border-b border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-800">Statistiques</h3>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div>
+                            <label class="text-sm font-medium text-gray-500">Total destinataires</label>
+                            <p class="text-2xl font-bold text-gray-800">{{ campaign.total_recipients }}</p>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-gray-500">Emails envoyés</label>
+                            <p class="text-2xl font-bold text-green-600">{{ campaign.sent_count }}</p>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-gray-500">Échecs</label>
+                            <p class="text-2xl font-bold text-red-600">{{ campaign.failed_count }}</p>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-gray-500">Taux de succès</label>
+                            <p class="text-2xl font-bold text-blue-600">{{ campaign.success_rate|floatformat:1 }}%</p>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                    <div class="p-6 border-b border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-800">Destinataires</h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="text-center">
+                            <p class="text-3xl font-bold text-gray-800">{{ recipients_count }}</p>
+                            <p class="text-sm text-gray-500">Abonnés actifs</p>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Actions -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                    <div class="p-6 border-b border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-800">Actions</h3>
+                    </div>
+                    <div class="p-6 space-y-3">
+                        <button onclick="previewCampaign({{ campaign.pk }})" class="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            <i class="fas fa-eye mr-2"></i>Prévisualiser
+                        </button>
+                        {% if campaign.status == 'draft' %}
+                        <button onclick="sendCampaign({{ campaign.pk }})" class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            <i class="fas fa-paper-plane mr-2"></i>Envoyer maintenant
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de prévisualisation -->
+    <div id="previewModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-gray-800">Aperçu de l'Email</h3>
+                        <button onclick="closePreview()" class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div id="previewContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CSRF Token -->
+    {% csrf_token %}
+    
+    <script>
+        // Toggle sidebar on mobile
+        document.getElementById('toggle-sidebar').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+            document.querySelector('.main-content').classList.toggle('active');
+        });
+
+        // Send campaign
+        function sendCampaign(campaignId) {
+            if (confirm('Êtes-vous sûr de vouloir envoyer cette campagne d\'email ? Cette action est irréversible.')) {
+                const button = event.target;
+                button.disabled = true;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Envoi en cours...';
+                
+                fetch(`/admin/campaigns/${campaignId}/send/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || ''
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        location.reload();
+                    } else {
+                        alert('Erreur: ' + data.message);
+                        button.disabled = false;
+                        button.innerHTML = '<i class="fas fa-paper-plane mr-2"></i>Envoyer maintenant';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Une erreur est survenue');
+                    button.disabled = false;
+                    button.innerHTML = '<i class="fas fa-paper-plane mr-2"></i>Envoyer maintenant';
+                });
+            }
+        }
+
+        // Preview campaign
+        function previewCampaign(campaignId) {
+            fetch(`/admin/campaigns/${campaignId}/preview/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || ''
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('previewContent').innerHTML = `
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-gray-800">Sujet:</h4>
+                            <p class="text-gray-600">${data.subject}</p>
+                        </div>
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-gray-800">Contenu:</h4>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="whitespace-pre-wrap">${data.content}</div>
+                            </div>
+                        </div>
+                        <div class="text-sm text-gray-500">
+                            <i class="fas fa-users mr-1"></i>
+                            Cette campagne sera envoyée à ${data.recipients_count} destinataires.
+                        </div>
+                    `;
+                    document.getElementById('previewModal').classList.remove('hidden');
+                } else {
+                    alert('Erreur lors de la prévisualisation');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Une erreur est survenue');
+            });
+        }
+
+        // Close preview
+        function closePreview() {
+            document.getElementById('previewModal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

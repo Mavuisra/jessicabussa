@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Jessica Bussa - Blog{% endblock %}
+
+{% block extra_css %}
+<style>
+
+/* IMAGE OPTIMISÉE */
+.blog-img {
+    transition: transform 0.6s ease;
+}
+.group:hover .blog-img {
+    transform: scale(1.05);
+}
+
+/* OVERLAY DOUX */
+.card-img-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.45), rgba(0,0,0,0.05));
+}
+
+/* TEXTE LIMITÉ */
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- HERO SIMPLE -->
+<section class="bg-primary py-20 text-center text-white">
+    <div class="container mx-auto px-4">
+        <h1 class="text-4xl md:text-5xl font-serif font-bold mb-4">
+            Le Blog
+        </h1>
+        <p class="text-lg md:text-xl max-w-2xl mx-auto opacity-90">
+            Réflexions, stratégies et expériences autour du leadership et de l’entrepreneuriat.
+        </p>
+    </div>
+</section>
+
+<!-- BLOG -->
+<section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            {% for post in blog_posts %}
+            <article class="group bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-xl transition duration-300">
+
+                <!-- IMAGE AJUSTÉE (PARFAITE) -->
+                <div class="relative h-44 md:h-48 overflow-hidden bg-gray-100">
+
+                    {% if post.featured_image %}
+                        <img src="{{ post.featured_image.url }}"
+                             alt="{{ post.title }}"
+                             class="blog-img w-full h-full object-cover">
+                        <div class="card-img-overlay"></div>
+                    {% else %}
+                        <div class="w-full h-full flex items-center justify-center text-gray-300 text-4xl">
+                            <i class="fas fa-newspaper"></i>
+                        </div>
+                    {% endif %}
+
+                    <!-- DATE -->
+                    <div class="absolute bottom-3 left-3 text-white text-xs font-medium">
+                        {{ post.created_at|date:"d M Y" }}
+                    </div>
+
+                </div>
+
+                <!-- CONTENT -->
+                <div class="p-5">
+
+                    <!-- META -->
+                    <div class="flex items-center justify-between text-xs text-gray-500 mb-2">
+                        <span>{{ post.views }} vues</span>
+                        <span class="text-primary font-medium">
+                            {{ post.get_category_display }}
+                        </span>
+                    </div>
+
+                    <!-- TITLE -->
+                    <h2 class="text-lg font-serif font-semibold mb-2 leading-tight">
+                        <a href="{% url 'portefolio:blog_detail' post.slug %}" 
+                           class="hover:text-primary transition">
+                            {{ post.title }}
+                        </a>
+                    </h2>
+
+                    <!-- EXCERPT -->
+                    <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                        {% if post.excerpt %}
+                            {{ post.excerpt }}
+                        {% else %}
+                            {{ post.content|striptags|truncatewords:25 }}
+                        {% endif %}
+                    </p>
+
+                    <!-- CTA -->
+                    <a href="{% url 'portefolio:blog_detail' post.slug %}" 
+                       class="text-primary text-sm font-medium hover:underline">
+                        Lire →
+                    </a>
+
+                </div>
+            </article>
+            {% empty %}
+
+            <!-- EMPTY -->
+            <div class="col-span-full text-center py-20">
+                <h3 class="text-xl font-semibold text-gray-600 mb-2">
+                    Aucun article disponible
+                </h3>
+                <p class="text-gray-500 mb-6">
+                    Reviens bientôt.
+                </p>
+                <a href="{% url 'portefolio:home' %}" 
+                   class="bg-primary text-white px-5 py-2 rounded-full hover:opacity-90">
+                    Accueil
+                </a>
+            </div>
+
+            {% endfor %}
+        </div>
+
+        <!-- PAGINATION -->
+        {% if is_paginated %}
+        <div class="mt-14 flex justify-center">
+            <div class="flex items-center space-x-2">
+
+                {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" 
+                   class="px-3 py-1 border rounded hover:bg-gray-100">
+                    ←
+                </a>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <span class="px-3 py-1 bg-primary text-white rounded">
+                            {{ num }}
+                        </span>
+                    {% elif num > page_obj.number|add:'-2' and num < page_obj.number|add:'2' %}
+                        <a href="?page={{ num }}" 
+                           class="px-3 py-1 border rounded hover:bg-gray-100">
+                            {{ num }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" 
+                   class="px-3 py-1 border rounded hover:bg-gray-100">
+                    →
+                </a>
+                {% endif %}
+
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="py-16 bg-white">
+    <div class="container mx-auto px-4 text-center">
+
+        <h2 class="text-2xl font-serif font-semibold mb-4">
+            Newsletter
+        </h2>
+
+        <p class="text-gray-600 mb-6">
+            Reçois les nouveaux articles directement.
+        </p>
+
+        <form class="flex flex-col md:flex-row gap-3 max-w-md mx-auto">
+            <input type="email"
+                   placeholder="Votre email"
+                   class="flex-1 px-4 py-2 border rounded-full focus:ring-2 focus:ring-primary outline-none">
+
+            <button type="submit"
+                    class="bg-primary text-white px-5 py-2 rounded-full hover:opacity-90">
+                S'abonner
+            </button>
+        </form>
+
+    </div>
+</section>
+
+{% endblock %}

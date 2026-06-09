@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message de Contact - Administration</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4F46E5;
+            --secondary-color: #7C3AED;
+        }
+        .bg-primary { background-color: var(--primary-color); }
+        .text-primary { color: var(--primary-color); }
+        .sidebar {
+            width: 250px;
+            transition: all 0.3s ease;
+        }
+        .main-content {
+            margin-left: 250px;
+            transition: all 0.3s ease;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 0;
+                overflow: hidden;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .sidebar.active {
+                width: 250px;
+            }
+            .main-content.active {
+                margin-left: 250px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Sidebar -->
+    <aside class="sidebar fixed top-0 left-0 h-full bg-white shadow-lg z-10">
+        <div class="p-4 border-b">
+            <div class="flex items-center justify-between">
+                <h1 class="text-xl font-bold text-primary">Administration</h1>
+                <button id="toggle-sidebar" class="md:hidden text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        <nav class="p-4">
+            <ul class="space-y-2">
+                <li>
+                    <a href="{% url 'portefolio:admin_dashboard' %}" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg">
+                        <i class="fas fa-tachometer-alt w-6"></i>
+                        <span>Tableau de bord</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'portefolio:admin_articles' %}" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg">
+                        <i class="fas fa-newspaper w-6"></i>
+                        <span>Articles</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'portefolio:admin_events' %}" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg">
+                        <i class="fas fa-calendar-alt w-6"></i>
+                        <span>Événements</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'portefolio:admin_gallery' %}" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg">
+                        <i class="fas fa-images w-6"></i>
+                        <span>Galerie</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'portefolio:admin_contacts' %}" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg bg-primary/10">
+                        <i class="fas fa-envelope w-6"></i>
+                        <span>Messages</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'portefolio:admin_newsletter' %}" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg">
+                        <i class="fas fa-newspaper w-6"></i>
+                        <span>Newsletter</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="absolute bottom-0 left-0 right-0 p-4 border-t">
+            <div class="flex items-center">
+                <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium text-gray-700">{{ request.user.username }}</p>
+                    <a href="{% url 'portefolio:admin_logout' %}" class="text-red-600 hover:text-red-800">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Déconnexion
+                    </a>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content min-h-screen p-6">
+        <!-- Header -->
+        <header class="mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800">Message de Contact</h1>
+                    <p class="text-gray-500">Détails du message reçu</p>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="{% url 'portefolio:admin_contacts' %}" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-arrow-left mr-2"></i>Retour à la liste
+                    </a>
+                    <button onclick="replyToContact()" class="bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-reply mr-2"></i>Répondre
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Message Details -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Message Content -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                    <div class="p-6 border-b border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-semibold text-gray-800">{{ contact.subject }}</h3>
+                            <div class="flex space-x-2">
+                                {% if contact.status == 'new' %}
+                                <span class="inline-flex px-3 py-1 text-sm font-semibold rounded-full bg-red-100 text-red-800">Nouveau</span>
+                                {% elif contact.status == 'read' %}
+                                <span class="inline-flex px-3 py-1 text-sm font-semibold rounded-full bg-blue-100 text-blue-800">Lu</span>
+                                {% elif contact.status == 'replied' %}
+                                <span class="inline-flex px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-800">Répondu</span>
+                                {% elif contact.status == 'archived' %}
+                                <span class="inline-flex px-3 py-1 text-sm font-semibold rounded-full bg-gray-100 text-gray-800">Archivé</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="mb-6">
+                            <h4 class="text-sm font-medium text-gray-500 mb-2">Message</h4>
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <p class="text-gray-800 whitespace-pre-wrap">{{ contact.message }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="space-y-6">
+                <!-- Contact Info -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                    <div class="p-6 border-b border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-800">Informations de Contact</h3>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div>
+                            <label class="text-sm font-medium text-gray-500">Nom</label>
+                            <p class="text-gray-800">{{ contact.name }}</p>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-gray-500">Email</label>
+                            <p class="text-gray-800">
+                                <a href="mailto:{{ contact.email }}" class="text-primary hover:text-primary/80">
+                                    {{ contact.email }}
+                                </a>
+                            </p>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-gray-500">Date d'envoi</label>
+                            <p class="text-gray-800">{{ contact.created_at|date:"d/m/Y à H:i" }}</p>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-gray-500">Dernière modification</label>
+                            <p class="text-gray-800">{{ contact.updated_at|date:"d/m/Y à H:i" }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Technical Info -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                    <div class="p-6 border-b border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-800">Informations Techniques</h3>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div>
+                            <label class="text-sm font-medium text-gray-500">Adresse IP</label>
+                            <p class="text-gray-800 font-mono text-sm">{{ contact.ip_address|default:"Non disponible" }}</p>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-gray-500">User Agent</label>
+                            <p class="text-gray-800 text-sm break-all">{{ contact.user_agent|default:"Non disponible" }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                    <div class="p-6 border-b border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-800">Actions</h3>
+                    </div>
+                    <div class="p-6 space-y-3">
+                        <button onclick="markAsReplied()" class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            <i class="fas fa-check mr-2"></i>Marquer comme répondu
+                        </button>
+                        <button onclick="markAsArchived()" class="w-full bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            <i class="fas fa-archive mr-2"></i>Archiver
+                        </button>
+                        <button onclick="deleteContact()" class="w-full bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            <i class="fas fa-trash mr-2"></i>Supprimer
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Toggle sidebar on mobile
+        document.getElementById('toggle-sidebar').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+            document.querySelector('.main-content').classList.toggle('active');
+        });
+
+        // Reply to contact
+        function replyToContact() {
+            const email = '{{ contact.email }}';
+            const subject = 'Re: {{ contact.subject }}';
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}`;
+            window.open(mailtoLink);
+        }
+
+        // Mark as replied
+        function markAsReplied() {
+            if (confirm('Marquer ce message comme répondu ?')) {
+                updateStatus('replied');
+            }
+        }
+
+        // Mark as archived
+        function markAsArchived() {
+            if (confirm('Archiver ce message ?')) {
+                updateStatus('archived');
+            }
+        }
+
+        // Delete contact
+        function deleteContact() {
+            if (confirm('Êtes-vous sûr de vouloir supprimer ce message ? Cette action est irréversible.')) {
+                if (confirm('Confirmer la suppression ?')) {
+                    // Redirect to delete URL or make AJAX call
+                    window.location.href = '{% url "portefolio:admin_contacts" %}?delete={{ contact.pk }}';
+                }
+            }
+        }
+
+        // Update status
+        function updateStatus(status) {
+            fetch(window.location.href, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || ''
+                },
+                body: `status=${status}`
+            })
+            .then(response => {
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    alert('Erreur lors de la mise à jour du statut');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Une erreur est survenue');
+            });
+        }
+    </script>
+</body>
+</html>

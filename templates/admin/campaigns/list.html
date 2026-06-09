@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campagnes Email - Administration</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4F46E5;
+            --secondary-color: #7C3AED;
+        }
+        .bg-primary { background-color: var(--primary-color); }
+        .text-primary { color: var(--primary-color); }
+        .sidebar {
+            width: 250px;
+            transition: all 0.3s ease;
+        }
+        .main-content {
+            margin-left: 250px;
+            transition: all 0.3s ease;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 0;
+                overflow: hidden;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .sidebar.active {
+                width: 250px;
+            }
+            .main-content.active {
+                margin-left: 250px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Sidebar -->
+    <aside class="sidebar fixed top-0 left-0 h-full bg-white shadow-lg z-10">
+        <div class="p-4 border-b">
+            <div class="flex items-center justify-between">
+                <h1 class="text-xl font-bold text-primary">Administration</h1>
+                <button id="toggle-sidebar" class="md:hidden text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        <nav class="p-4">
+            <ul class="space-y-2">
+                <li>
+                    <a href="{% url 'portefolio:admin_dashboard' %}" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg">
+                        <i class="fas fa-tachometer-alt w-6"></i>
+                        <span>Tableau de bord</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'portefolio:admin_articles' %}" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg">
+                        <i class="fas fa-newspaper w-6"></i>
+                        <span>Articles</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'portefolio:admin_events' %}" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg">
+                        <i class="fas fa-calendar-alt w-6"></i>
+                        <span>Événements</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'portefolio:admin_gallery' %}" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg">
+                        <i class="fas fa-images w-6"></i>
+                        <span>Galerie</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'portefolio:admin_contacts' %}" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg">
+                        <i class="fas fa-envelope w-6"></i>
+                        <span>Messages</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'portefolio:admin_newsletter' %}" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg">
+                        <i class="fas fa-newspaper w-6"></i>
+                        <span>Newsletter</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'portefolio:admin_campaigns' %}" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg bg-primary/10">
+                        <i class="fas fa-paper-plane w-6"></i>
+                        <span>Campagnes Email</span>
+                        {% if draft_campaigns > 0 %}
+                        <span class="ml-auto bg-orange-500 text-white text-xs rounded-full px-2 py-1">{{ draft_campaigns }}</span>
+                        {% endif %}
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="absolute bottom-0 left-0 right-0 p-4 border-t">
+            <div class="flex items-center">
+                <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium text-gray-700">{{ request.user.username }}</p>
+                    <a href="{% url 'portefolio:admin_logout' %}" class="text-red-600 hover:text-red-800">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Déconnexion
+                    </a>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content min-h-screen p-6">
+        <!-- Header -->
+        <header class="mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800">Campagnes Email</h1>
+                    <p class="text-gray-500">Gestion des campagnes d'email newsletter</p>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="{% url 'portefolio:admin_campaign_create' %}" class="bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-plus mr-2"></i>Nouvelle Campagne
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-500">Total Campagnes</p>
+                        <h3 class="text-2xl font-bold text-gray-800">{{ total_campaigns }}</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-500">
+                        <i class="fas fa-paper-plane"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-500">Brouillons</p>
+                        <h3 class="text-2xl font-bold text-orange-600">{{ draft_campaigns }}</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-500">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-500">Envoyées</p>
+                        <h3 class="text-2xl font-bold text-green-600">{{ sent_campaigns }}</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-500">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-500">Programmées</p>
+                        <h3 class="text-2xl font-bold text-purple-600">{{ scheduled_campaigns }}</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-purple-500">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campaigns List -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-800">Liste des Campagnes</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Titre</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sujet</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Destinataires</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for campaign in campaigns %}
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900">{{ campaign.title }}</div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="text-sm text-gray-900 max-w-xs truncate">{{ campaign.subject }}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {% if campaign.status == 'draft' %}
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-orange-100 text-orange-800">Brouillon</span>
+                                {% elif campaign.status == 'scheduled' %}
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">Programmé</span>
+                                {% elif campaign.status == 'sending' %}
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">En cours</span>
+                                {% elif campaign.status == 'sent' %}
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Envoyé</span>
+                                {% elif campaign.status == 'cancelled' %}
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Annulé</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {% if campaign.status == 'sent' %}
+                                    {{ campaign.sent_count }}/{{ campaign.total_recipients }}
+                                {% else %}
+                                    {{ campaign.get_recipients.count }}
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ campaign.created_at|date:"d/m/Y H:i" }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <a href="{% url 'portefolio:admin_campaign_detail' campaign.pk %}" class="text-primary hover:text-primary/80 mr-3">
+                                    <i class="fas fa-eye"></i> Voir
+                                </a>
+                                {% if campaign.status == 'draft' %}
+                                <button onclick="sendCampaign({{ campaign.pk }})" class="text-green-600 hover:text-green-800 mr-3">
+                                    <i class="fas fa-paper-plane"></i> Envoyer
+                                </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                                Aucune campagne d'email trouvée.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pagination -->
+            {% if is_paginated %}
+            <div class="px-6 py-4 border-t border-gray-200">
+                <div class="flex items-center justify-between">
+                    <div class="text-sm text-gray-700">
+                        Affichage de {{ page_obj.start_index }} à {{ page_obj.end_index }} sur {{ page_obj.paginator.count }} campagnes
+                    </div>
+                    <div class="flex space-x-2">
+                        {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}" class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200">
+                            Précédent
+                        </a>
+                        {% endif %}
+                        
+                        {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                        <span class="px-3 py-1 text-sm bg-primary text-white rounded">{{ num }}</span>
+                        {% else %}
+                        <a href="?page={{ num }}" class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200">{{ num }}</a>
+                        {% endif %}
+                        {% endfor %}
+                        
+                        {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}" class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200">
+                            Suivant
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <!-- CSRF Token -->
+    {% csrf_token %}
+
+    <script>
+        // Toggle sidebar on mobile
+        document.getElementById('toggle-sidebar').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+            document.querySelector('.main-content').classList.toggle('active');
+        });
+
+        // Send campaign
+        function sendCampaign(campaignId) {
+            if (confirm('Êtes-vous sûr de vouloir envoyer cette campagne d\'email ? Cette action est irréversible.')) {
+                fetch(`/admin/campaigns/${campaignId}/send/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || ''
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        location.reload();
+                    } else {
+                        alert('Erreur: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Une erreur est survenue');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

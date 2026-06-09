@@ -1,0 +1,99 @@
+{% load static %}
+
+<div class="fixed bottom-0 left-0 right-0 z-50 mobile-tab-bar bg-white shadow-lg border-t border-gray-200" style="display: none;" id="mobileTabBar">
+    <div class="grid grid-cols-5 h-16">
+        <a href="{% url 'home' %}" class="mobile-tab-item active-state tap-highlight flex flex-col items-center justify-center">
+            <i class="fas fa-home text-xl"></i>
+            <span class="text-xs mt-1">Accueil</span>
+        </a>
+        <a href="{% url 'about' %}" class="mobile-tab-item active-state tap-highlight flex flex-col items-center justify-center">
+            <i class="fas fa-info-circle text-xl"></i>
+            <span class="text-xs mt-1">À propos</span>
+        </a>
+        <a href="{% url 'foundation' %}" class="mobile-tab-item active-state tap-highlight flex flex-col items-center justify-center">
+            <i class="fas fa-hands-helping text-xl"></i>
+            <span class="text-xs mt-1">Fondation</span>
+        </a>
+        <a href="{% url 'services' %}" class="mobile-tab-item active-state tap-highlight flex flex-col items-center justify-center">
+            <i class="fas fa-briefcase text-xl"></i>
+            <span class="text-xs mt-1">Services</span>
+        </a>
+        <a href="{% url 'contact' %}" class="mobile-tab-item active-state tap-highlight flex flex-col items-center justify-center">
+            <i class="fas fa-envelope text-xl"></i>
+            <span class="text-xs mt-1">Contact</span>
+        </a>
+    </div>
+</div>
+
+<button id="menuToggle" class="fixed top-4 right-4 z-50 w-12 h-12 rounded-full bg-primary text-white shadow-lg flex items-center justify-center active-state md:hidden">
+    <i class="fas fa-bars" id="menuIcon"></i>
+</button>
+
+<div id="mobileFullMenu" class="fixed inset-0 bg-dark bg-opacity-95 z-40 flex items-center justify-center transform translate-x-full transition-transform duration-300 ease-in-out">
+    <nav class="text-center">
+        <ul class="space-y-6">
+            <li><a href="{% url 'home' %}" class="text-white text-2xl font-bold hover:text-primary transition-colors active-state tap-highlight">Accueil</a></li>
+            <li><a href="{% url 'about' %}" class="text-white text-2xl font-bold hover:text-primary transition-colors active-state tap-highlight">À propos</a></li>
+            <li><a href="{% url 'foundation' %}" class="text-white text-2xl font-bold hover:text-primary transition-colors active-state tap-highlight">Fondation</a></li>
+            <li><a href="{% url 'services' %}" class="text-white text-2xl font-bold hover:text-primary transition-colors active-state tap-highlight">Services</a></li>
+            <li><a href="{% url 'leadership' %}" class="text-white text-2xl font-bold hover:text-primary transition-colors active-state tap-highlight">Leadership</a></li>
+            <li><a href="{% url 'media' %}" class="text-white text-2xl font-bold hover:text-primary transition-colors active-state tap-highlight">Médias</a></li>
+            <li><a href="{% url 'events' %}" class="text-white text-2xl font-bold hover:text-primary transition-colors active-state tap-highlight">Événements</a></li>
+            <li><a href="{% url 'contact' %}" class="text-white text-2xl font-bold hover:text-primary transition-colors active-state tap-highlight">Contact</a></li>
+        </ul>
+    </nav>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const menuToggle = document.getElementById('menuToggle');
+    const menuIcon = document.getElementById('menuIcon');
+    const mobileFullMenu = document.getElementById('mobileFullMenu');
+    const mobileTabBar = document.getElementById('mobileTabBar');
+    
+    // Check if we're on mobile
+    if (window.innerWidth < 768) {
+        mobileTabBar.style.display = 'block';
+        document.body.classList.add('has-mobile-nav');
+    }
+    
+    // Toggle menu
+    menuToggle.addEventListener('click', function() {
+        if (mobileFullMenu.classList.contains('translate-x-full')) {
+            mobileFullMenu.classList.remove('translate-x-full');
+            menuIcon.classList.remove('fa-bars');
+            menuIcon.classList.add('fa-times');
+        } else {
+            mobileFullMenu.classList.add('translate-x-full');
+            menuIcon.classList.remove('fa-times');
+            menuIcon.classList.add('fa-bars');
+        }
+    });
+    
+    // Set active tab based on current page
+    const currentPath = window.location.pathname;
+    const tabItems = document.querySelectorAll('.mobile-tab-item');
+    
+    tabItems.forEach(item => {
+        if (item.getAttribute('href') === currentPath) {
+            item.classList.add('active');
+        }
+    });
+    
+    // Hide tab bar on scroll down, show on scroll up
+    let lastScrollTop = 0;
+    window.addEventListener('scroll', function() {
+        let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (currentScroll > lastScrollTop && currentScroll > 100) {
+            // Scroll down
+            mobileTabBar.style.transform = 'translateY(100%)';
+        } else {
+            // Scroll up
+            mobileTabBar.style.transform = 'translateY(0)';
+        }
+        
+        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+    }, { passive: true });
+});
+</script> 
