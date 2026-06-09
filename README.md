@@ -122,3 +122,21 @@ storage/        → Sessions
 media/          → Uploads
 database/       → schema.sql (SQLite), schema.mysql.sql (LWS)
 ```
+
+## Dépannage 403 Forbidden
+
+Message LWS : *« You do not have permission to access this document »*.
+
+**Causes fréquentes :**
+
+1. **Fichier `.htaccess` « Deny all » à la racine du projet** — supprimez-le via FTP dans le dossier parent de `www/`, pas celui dans `www/`.
+2. **`index.php` absent de `www/`** — copiez `public/index.php` directement dans `www/`, pas dans `www/public/`.
+3. **Tout le dépôt uploadé dans `www/`** — contenu de `public/` → `www/`, le reste → un niveau au-dessus.
+4. **Dossier `vendor/` manquant** au-dessus de `www/` — uploadez `vendor/` après `composer install`.
+
+**Checklist FTP :**
+
+- [ ] `www/index.php` existe
+- [ ] `www/.htaccess` contient `Require all granted`
+- [ ] Pas de `.htaccess` avec `Deny from all` hors de `www/`
+- [ ] `../vendor/autoload.php` existe (vendor au même niveau que `www/`)
