@@ -33,6 +33,8 @@ database/full-install.mysql.sql
 /media/*
 !/media/.gitkeep
 !/media/.htaccess
+!/media/inline/
+!/media/inline/**
 
 # Python (scripts utilitaires)
 *.pyc

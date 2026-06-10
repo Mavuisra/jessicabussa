@@ -6,6 +6,7 @@ namespace App\Controllers\Admin;
 
 use App\Core\Controller;
 use App\Models\Event;
+use App\Services\InlineImageExtractor;
 use App\Services\UploadService;
 
 final class EventAdminController extends Controller
@@ -105,13 +106,17 @@ final class EventAdminController extends Controller
             $slug = slugify($_POST['title'] ?? '');
         }
 
+        [$description] = InlineImageExtractor::extractFromHtml($_POST['description'] ?? '');
+        [$content] = InlineImageExtractor::extractFromHtml($_POST['content'] ?? '');
+        [$excerpt] = InlineImageExtractor::extractFromHtml($_POST['excerpt'] ?? '');
+
         return [
             'title' => trim($_POST['title'] ?? ''),
             'slug' => $slug,
             'event_type' => $_POST['event_type'] ?? 'conference',
-            'description' => $_POST['description'] ?? '',
-            'content' => $_POST['content'] ?? '',
-            'excerpt' => $_POST['excerpt'] ?? '',
+            'description' => $description,
+            'content' => $content,
+            'excerpt' => $excerpt,
             'date' => $_POST['date'] ?? date('Y-m-d'),
             'time' => $_POST['time'] ?: null,
             'end_date' => $_POST['end_date'] ?: null,

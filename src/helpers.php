@@ -84,6 +84,24 @@ function asset(string $path): string
     return '/static/' . ltrim($path, '/');
 }
 
+function current_url(): string
+{
+    $base = rtrim((string) config('app')['url'], '/');
+    $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+    $query = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_QUERY);
+
+    return $base . $path . ($query ? '?' . $query : '');
+}
+
+function absolute_url(string $path): string
+{
+    if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+        return $path;
+    }
+
+    return rtrim((string) config('app')['url'], '/') . '/' . ltrim($path, '/');
+}
+
 function url(string $name, mixed ...$params): string
 {
     return \App\Core\Router::url($name, ...$params);

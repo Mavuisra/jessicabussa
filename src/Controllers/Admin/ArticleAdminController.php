@@ -6,6 +6,7 @@ namespace App\Controllers\Admin;
 
 use App\Core\Controller;
 use App\Models\Article;
+use App\Services\InlineImageExtractor;
 use App\Services\UploadService;
 
 final class ArticleAdminController extends Controller
@@ -104,12 +105,15 @@ final class ArticleAdminController extends Controller
             $slug = slugify($_POST['title'] ?? '');
         }
 
+        [$content] = InlineImageExtractor::extractFromHtml($_POST['content'] ?? '');
+        [$excerpt] = InlineImageExtractor::extractFromHtml($_POST['excerpt'] ?? '');
+
         return [
             'title' => trim($_POST['title'] ?? ''),
             'slug' => $slug,
             'category' => $_POST['category'] ?? 'actualites',
-            'content' => $_POST['content'] ?? '',
-            'excerpt' => $_POST['excerpt'] ?? '',
+            'content' => $content,
+            'excerpt' => $excerpt,
             'status' => $_POST['status'] ?? 'draft',
         ];
     }

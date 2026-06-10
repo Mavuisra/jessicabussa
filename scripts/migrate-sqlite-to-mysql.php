@@ -307,6 +307,13 @@ if ($exportPath !== null) {
         ? $exportPath
         : $root . '/' . ltrim($exportPath, '/');
 
+    echo "Extraction des images base64 intégrées...\n";
+    passthru(PHP_BINARY . ' ' . escapeshellarg($root . '/scripts/extract-inline-images.php'), $extractCode);
+    if ($extractCode !== 0) {
+        fwrite(STDERR, "extract-inline-images.php a échoué (code $extractCode).\n");
+        exit(1);
+    }
+
     $migrator = new SqliteToMysqlMigrator($sqlite);
     $migrator->exportToFile($exportFull);
 
@@ -344,6 +351,13 @@ try {
 
 if ($installSchema) {
     installSchema($mysql, $root . '/database/schema.mysql.sql');
+}
+
+echo "Extraction des images base64 intégrées...\n";
+passthru(PHP_BINARY . ' ' . escapeshellarg($root . '/scripts/extract-inline-images.php'), $extractCode);
+if ($extractCode !== 0) {
+    fwrite(STDERR, "extract-inline-images.php a échoué (code $extractCode).\n");
+    exit(1);
 }
 
 $migrator = new SqliteToMysqlMigrator($sqlite, $mysql);

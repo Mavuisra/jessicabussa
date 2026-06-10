@@ -83,14 +83,14 @@ final class BlogController extends Controller
             'title' => $post->title,
             'post' => $post,
             'comments' => ArticleComment::approvedForArticle((int) $post->id),
-            'visitor_stats' => [
+            'visitor_stats' => (object) [
                 'is_unique_visitor' => $visitor->isUniqueVisitor(),
                 'visit_count' => (int) $visitor->visit_count,
                 'has_liked' => (bool) $visitor->has_liked,
                 'has_shared' => (bool) $visitor->has_shared,
                 'has_commented' => (bool) $visitor->has_commented,
             ],
-            'article_stats' => [
+            'article_stats' => (object) [
                 'unique_visitors' => $uniqueVisitors,
                 'total_visits' => $totalVisits,
                 'likes_count' => (int) $post->likes,

@@ -13,6 +13,10 @@
         line-height: 1.8;
         color: #424242;
         text-align: left;
+        max-height: none !important;
+        overflow: visible !important;
+        display: block !important;
+        -webkit-line-clamp: unset !important;
     }
 
     @media (max-width: 768px) {
@@ -34,7 +38,7 @@
 
     /* Styles pour le contenu HTML riche (Quill) avec interlignes réduites */
     .blog-content h1, .blog-content h2, .blog-content h3, .blog-content h4, .blog-content h5, .blog-content h6 {
-        font-family: "Times New Roman", Times, serif
+        font-family: "Times New Roman", Times, serif;
         font-weight: 600;
         margin-top: 0.8rem;
         margin-bottom: 0.4rem;
@@ -75,7 +79,7 @@
     .blog-content ul, .blog-content ol {
         margin: 0.6rem 0;
         padding-left: 2rem;
-        line-height: 0.8;
+        line-height: 1.6;
     }
 
     .blog-content li {
@@ -117,14 +121,14 @@
         border-radius: 0.5rem;
         overflow-x: auto;
         margin: 0.8rem 0;
-        line-height: 0.8;
+        line-height: 1.5;
     }
 
     .blog-content pre code {
         background: none;
         padding: 0;
         color: inherit;
-        line-height: 0.8;
+        line-height: 1.5;
     }
 
     .blog-content strong {
@@ -436,6 +440,16 @@
 </style>
 HTML_BLOCK; ?>
 
+<?php
+$articleUrl = current_url();
+$shareTitle = rawurlencode((string) $post->title);
+$shareDescription = rawurlencode((string) ($post->excerpt ?: $post->title));
+$shareImage = $post->featured_image
+    ? rawurlencode(absolute_url(media_url((string) $post->featured_image)))
+    : '';
+$commentsCount = count($comments);
+?>
+
 <!-- Indicateur de progression de lecture -->
 <div class="progress-container">
     <div class="progress-bar" id="progressBar"></div>
@@ -497,8 +511,8 @@ HTML_BLOCK; ?>
 
             <!-- Contenu principal avec design amélioré -->
             <article class="space-y-4 md:space-y-6">
-                <div class="prose prose-lg max-w-none blog-content scroll-reveal" id="blogContent">
-                    <?= $post->content ?>
+                <div class="max-w-none blog-content w-full" id="blogContent">
+                    <?= (string) ($post->content ?: $post->excerpt) ?>
                 </div>
 
                 <!-- Tags et catégories -->
@@ -552,7 +566,7 @@ HTML_BLOCK; ?>
 
                             <a href="#comments" class="glass-elite flex flex-col items-center justify-center w-20 md:w-24 h-20 md:h-24 rounded-xl hover:bg-primary/5 transition-all btn-shine">
                                 <i class="far fa-comment-dots text-2xl md:text-3xl mb-1 md:mb-2 text-primary"></i>
-                                <span class="text-lg font-medium">{{ comments|length }}</span>
+                                <span class="text-lg font-medium"><?= e($commentsCount) ?></span>
                                 <span class="text-xs text-gray-500">Commentaires</span>
                             </a>
                         </div>
@@ -560,65 +574,57 @@ HTML_BLOCK; ?>
                         <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 md:gap-3 mobile-top-spacing">
                             <span class="text-sm text-gray-500 w-full md:w-auto text-center md:text-left mb-2 md:mr-2 md:mb-0">Partager sur :</span>
                             <div class="flex justify-center gap-2 flex-wrap">
-                                <!-- Facebook avec image -->
-                                <a href="https://www.facebook.com/sharer/sharer.php?u=<?= e($request->build_absolute_uri) ?>&picture=<?php if ($post->featured_image): ?>{{ request.build_absolute_uri|slice:':-1' }}<?= e(media_url($post->featured_image ?? '')) ?><?php endif; ?>&title={{ post.title|urlencode }}&description={{ post.excerpt|default:post.title|urlencode }}"
-                                   target="_blank"
+                                <a href="https://www.facebook.com/sharer/sharer.php?u=<?= rawurlencode($articleUrl) ?><?php if ($shareImage): ?>&picture=<?= $shareImage ?><?php endif; ?>&title=<?= $shareTitle ?>&description=<?= $shareDescription ?>"
+                                   target="_blank" rel="noopener noreferrer"
                                    class="w-10 md:w-12 h-10 md:h-12 flex items-center justify-center rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-colors hover:scale-110 transform duration-200"
                                    title="Partager sur Facebook">
                                     <i class="fab fa-facebook-f"></i>
                                 </a>
 
-                                <!-- Twitter/X avec image -->
-                                <a href="https://twitter.com/intent/tweet?url=<?= e($request->build_absolute_uri) ?>&text={{ post.title|urlencode }}&via=jessicabussa<?php if ($post->featured_image): ?>&media={{ request.build_absolute_uri|slice:':-1' }}<?= e(media_url($post->featured_image ?? '')) ?><?php endif; ?>"
-                                   target="_blank"
+                                <a href="https://twitter.com/intent/tweet?url=<?= rawurlencode($articleUrl) ?>&text=<?= $shareTitle ?>&via=jessicabussa"
+                                   target="_blank" rel="noopener noreferrer"
                                    class="w-10 md:w-12 h-10 md:h-12 flex items-center justify-center rounded-full bg-black text-white hover:bg-gray-800 transition-colors hover:scale-110 transform duration-200"
                                    title="Partager sur X (Twitter)">
                                     <i class="fab fa-twitter"></i>
                                 </a>
 
-                                <!-- LinkedIn avec image -->
-                                <a href="https://www.linkedin.com/shareArticle?mini=true&url=<?= e($request->build_absolute_uri) ?>&title={{ post.title|urlencode }}&summary={{ post.excerpt|default:post.title|urlencode }}<?php if ($post->featured_image): ?>&media={{ request.build_absolute_uri|slice:':-1' }}<?= e(media_url($post->featured_image ?? '')) ?><?php endif; ?>"
-                                   target="_blank"
+                                <a href="https://www.linkedin.com/shareArticle?mini=true&url=<?= rawurlencode($articleUrl) ?>&title=<?= $shareTitle ?>&summary=<?= $shareDescription ?>"
+                                   target="_blank" rel="noopener noreferrer"
                                    class="w-10 md:w-12 h-10 md:h-12 flex items-center justify-center rounded-full bg-blue-700 text-white hover:bg-blue-800 transition-colors hover:scale-110 transform duration-200"
                                    title="Partager sur LinkedIn">
                                     <i class="fab fa-linkedin-in"></i>
                                 </a>
 
-                                <!-- WhatsApp avec image -->
-                                <a href="https://api.whatsapp.com/send?text={{ post.title|urlencode }} - <?= e($request->build_absolute_uri) ?>"
-                                   target="_blank"
+                                <a href="https://api.whatsapp.com/send?text=<?= $shareTitle ?>%20-%20<?= rawurlencode($articleUrl) ?>"
+                                   target="_blank" rel="noopener noreferrer"
                                    class="w-10 md:w-12 h-10 md:h-12 flex items-center justify-center rounded-full bg-green-500 text-white hover:bg-green-600 transition-colors hover:scale-110 transform duration-200"
                                    title="Partager sur WhatsApp">
                                     <i class="fab fa-whatsapp"></i>
                                 </a>
 
-                                <!-- Telegram -->
-                                <a href="https://t.me/share/url?url=<?= e($request->build_absolute_uri) ?>&text={{ post.title|urlencode }}"
-                                   target="_blank"
+                                <a href="https://t.me/share/url?url=<?= rawurlencode($articleUrl) ?>&text=<?= $shareTitle ?>"
+                                   target="_blank" rel="noopener noreferrer"
                                    class="w-10 md:w-12 h-10 md:h-12 flex items-center justify-center rounded-full bg-blue-400 text-white hover:bg-blue-500 transition-colors hover:scale-110 transform duration-200"
                                    title="Partager sur Telegram">
                                     <i class="fab fa-telegram-plane"></i>
                                 </a>
 
-                                <!-- Pinterest avec image -->
                                 <?php if ($post->featured_image): ?>
-                                <a href="https://pinterest.com/pin/create/button/?url=<?= e($request->build_absolute_uri) ?>&media={{ request.build_absolute_uri|slice:':-1' }}<?= e(media_url($post->featured_image ?? '')) ?>&description={{ post.title|urlencode }}"
-                                   target="_blank"
+                                <a href="https://pinterest.com/pin/create/button/?url=<?= rawurlencode($articleUrl) ?>&media=<?= $shareImage ?>&description=<?= $shareTitle ?>"
+                                   target="_blank" rel="noopener noreferrer"
                                    class="w-10 md:w-12 h-10 md:h-12 flex items-center justify-center rounded-full bg-red-500 text-white hover:bg-red-600 transition-colors hover:scale-110 transform duration-200"
                                    title="Épingler sur Pinterest">
                                     <i class="fab fa-pinterest-p"></i>
                                 </a>
                                 <?php endif; ?>
 
-                                <!-- Email -->
-                                <a href="mailto:?subject={{ post.title|urlencode }}&body={{ post.title|urlencode }} - <?= e($request->build_absolute_uri) ?>"
+                                <a href="mailto:?subject=<?= $shareTitle ?>&body=<?= $shareTitle ?>%20-%20<?= rawurlencode($articleUrl) ?>"
                                    class="w-10 md:w-12 h-10 md:h-12 flex items-center justify-center rounded-full bg-gray-600 text-white hover:bg-gray-700 transition-colors hover:scale-110 transform duration-200"
                                    title="Partager par email">
                                     <i class="fas fa-envelope"></i>
                                 </a>
 
-                                <!-- Copier le lien -->
-                                <button onclick="copyToClipboard('<?= e($request->build_absolute_uri) ?>')"
+                                <button onclick="copyToClipboard(<?= json_encode($articleUrl, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT) ?>)"
                                         class="w-10 md:w-12 h-10 md:h-12 flex items-center justify-center rounded-full bg-purple-500 text-white hover:bg-purple-600 transition-colors hover:scale-110 transform duration-200"
                                         title="Copier le lien">
                                     <i class="fas fa-copy"></i>
@@ -632,7 +638,7 @@ HTML_BLOCK; ?>
                 <div class="mt-12 md:mt-16 scroll-reveal" id="comments">
                     <h3 class="text-2xl font-serif font-semibold mb-4 md:mb-6 flex items-center title-underline animated mobile-center mobile-smaller-heading">
                         <i class="far fa-comments mr-3 text-primary"></i>
-                        Commentaires ({{ comments|length }})
+                        Commentaires (<?= e($commentsCount) ?>)
                     </h3>
 
                     <?php if ($comments): ?>
@@ -675,16 +681,21 @@ HTML_BLOCK; ?>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                                 <div>
                                     <label for="id_name" class="block text-sm font-medium text-gray-700 mb-1 md:mb-2">Votre nom</label>
-                                    <?= $comment_form->name ?>
+                                    <input type="text" name="name" id="id_name" required maxlength="100"
+                                           value="<?= e(old('name')) ?>"
+                                           class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-primary focus:border-transparent">
                                 </div>
                                 <div>
                                     <label for="id_email" class="block text-sm font-medium text-gray-700 mb-1 md:mb-2">Votre email</label>
-                                    <?= $comment_form->email ?>
+                                    <input type="email" name="email" id="id_email" required maxlength="254"
+                                           value="<?= e(old('email')) ?>"
+                                           class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-primary focus:border-transparent">
                                 </div>
                             </div>
                             <div>
                                 <label for="id_content" class="block text-sm font-medium text-gray-700 mb-1 md:mb-2">Votre commentaire</label>
-                                <?= $comment_form->content ?>
+                                <textarea name="content" id="id_content" rows="5" required
+                                          class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-primary focus:border-transparent"><?= e(old('content')) ?></textarea>
                             </div>
                             <div class="flex justify-center md:justify-start">
                                 <button type="submit" class="btn-shine glass-elite bg-primary text-white px-6 md:px-8 py-3 md:py-4 rounded-full hover:bg-opacity-90 transition-all flex items-center justify-center space-x-2 text-base md:text-lg">
@@ -825,7 +836,7 @@ function likePost(slug) {
     fetch(`/blog/${slug}/like/`, {
         method: 'POST',
         headers: {
-            'X-CSRFToken': document.querySelector('[name=_csrf]').value
+            'X-CSRF-Token': document.querySelector('[name=_csrf]').value
         }
     })
     .then(response => response.json())
@@ -866,7 +877,7 @@ function sharePost(slug) {
     fetch(`/blog/${slug}/share/`, {
         method: 'POST',
         headers: {
-            'X-CSRFToken': document.querySelector('[name=_csrf]').value
+            'X-CSRF-Token': document.querySelector('[name=_csrf]').value
         }
     })
     .then(response => response.json())
