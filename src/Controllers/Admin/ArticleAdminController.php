@@ -77,7 +77,7 @@ final class ArticleAdminController extends Controller
             $this->redirectRoute('admin_articles');
         }
 
-        $this->adminView('admin/articles/edit', ['title' => 'Modifier l\'article', 'article' => $article]);
+        $this->adminView('admin/articles/create', ['title' => 'Modifier l\'article', 'article' => $article]);
     }
 
     public function delete(int $id): void

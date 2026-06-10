@@ -78,7 +78,7 @@ final class EventAdminController extends Controller
             $this->redirectRoute('admin_events');
         }
 
-        $this->adminView('admin/events/edit', ['title' => 'Modifier l\'événement', 'event' => $event]);
+        $this->adminView('admin/events/create', ['title' => 'Modifier l\'événement', 'event' => $event]);
     }
 
     public function delete(int $id): void

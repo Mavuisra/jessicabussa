@@ -47,7 +47,7 @@ final class GalleryAdminController extends Controller
             $this->redirectRoute('admin_gallery');
         }
 
-        $this->adminView('admin/gallery/create', ['title' => 'Ajouter une image', 'item' => null]);
+        $this->adminView('admin/gallery/edit', ['title' => 'Ajouter une image', 'item' => null]);
     }
 
     public function edit(int $id): void

@@ -18,6 +18,10 @@ abstract class Model
 
     public function __get(string $key): mixed
     {
+        if ($key === 'pk') {
+            return $this->attributes['id'] ?? null;
+        }
+
         return $this->attributes[$key] ?? null;
     }
 

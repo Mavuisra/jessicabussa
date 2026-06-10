@@ -170,6 +170,11 @@ function event_type_label(string $type): string
     return config('categories')['event'][$type] ?? ucfirst($type);
 }
 
+function gallery_label(string $category): string
+{
+    return config('categories')['gallery'][$category] ?? ucfirst($category);
+}
+
 function truncate_words(string $text, int $words = 25): string
 {
     $parts = preg_split('/\s+/', strip_tags($text)) ?: [];

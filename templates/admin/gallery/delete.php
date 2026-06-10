@@ -97,18 +97,6 @@ HTML_BLOCK; ?>
         </a>
     </div>
 
-    <!-- Messages -->
-    <?php if ($messages): ?>
-        <?php $__loop_items = $messages; foreach ($messages as $message): ?>
-            <div class="alert alert-<?= e($message->tags) ?> alert-dismissible fade show" role="alert">
-                <?= e($message) ?>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        <?php endforeach; ?>
-    <?php endif; ?>
-
     <!-- Contenu -->
     <div class="delete-container">
         <!-- Avertissement -->
@@ -125,18 +113,18 @@ HTML_BLOCK; ?>
         <!-- Aperçu de l'élément à supprimer -->
         <div class="item-preview">
             <div class="text-center">
-                <?php if ($object->image): ?>
-                    <img src="<?= e(media_url($object->image ?? '')) ?>" alt="<?= e($object->title) ?>" class="item-image">
+                <?php if (!empty($item?->image)): ?>
+                    <img src="<?= e(media_url((string) $item->image)) ?>" alt="<?= e((string) $item->title) ?>" class="item-image">
                 <?php else: ?>
                     <div class="item-image" style="background: #f3f4f6; display: flex; align-items: center; justify-content: center;">
                         <i class="fas fa-image text-gray-400" style="font-size: 2rem;"></i>
                     </div>
                 <?php endif; ?>
-                
-                <div class="item-title"><?= e($object->title) ?></div>
-                <div class="item-category"><?= e($object->getCategoryDisplay()) ?></div>
-                <?php if ($object->description): ?>
-                    <div class="item-description"><?= e($object->description) ?></div>
+
+                <div class="item-title"><?= e((string) $item->title) ?></div>
+                <div class="item-category"><?= e($item->getCategoryDisplay()) ?></div>
+                <?php if (!empty($item?->description)): ?>
+                    <div class="item-description"><?= e((string) $item->description) ?></div>
                 <?php endif; ?>
             </div>
         </div>

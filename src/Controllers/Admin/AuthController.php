@@ -29,7 +29,7 @@ final class AuthController extends Controller
             $this->flashError("Nom d'utilisateur ou mot de passe incorrect.");
         }
 
-        $this->adminView('admin/login', ['title' => 'Connexion Admin']);
+        $this->view('admin/login', ['title' => 'Connexion Admin'], null);
     }
 
     public function logout(): void

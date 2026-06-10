@@ -271,6 +271,7 @@ HTML_BLOCK; ?>
                                 Titre de l'article
                             </label>
                             <input type="text" name="title" id="id_title" class="form-input" 
+                                   value="<?= e(old('title', $article?->title ?? '')) ?>"
                                    placeholder="Entrez un titre accrocheur..." required>
                             <div class="char-counter" id="title-counter">0/100</div>
                         </div>
@@ -282,6 +283,7 @@ HTML_BLOCK; ?>
                                 Slug (URL)
                             </label>
                             <input type="text" name="slug" id="id_slug" class="form-input" 
+                                   value="<?= e(old('slug', $article?->slug ?? '')) ?>"
                                    placeholder="url-de-l-article" required>
                             <p class="text-xs text-gray-500 mt-1">Généré automatiquement</p>
                         </div>
@@ -295,16 +297,17 @@ HTML_BLOCK; ?>
                             <i class="fas fa-folder mr-2"></i>
                             Catégorie
                         </label>
+                        <?php $cat = old('category', $article?->category ?? ''); ?>
                         <select name="category" id="id_category" class="form-input form-select" required>
                             <option value="">Sélectionnez une catégorie</option>
-                            <option value="leadership">Leadership</option>
-                            <option value="entrepreneuriat">Entrepreneuriat</option>
-                            <option value="education">Éducation</option>
-                            <option value="social">Social & Développement</option>
-                            <option value="politique">Politique</option>
-                            <option value="actualites">Actualités</option>
-                            <option value="temoignages">Témoignages</option>
-                            <option value="conseils">Conseils & Astuces</option>
+                            <option value="leadership" <?= $cat === 'leadership' ? 'selected' : '' ?>>Leadership</option>
+                            <option value="entrepreneuriat" <?= $cat === 'entrepreneuriat' ? 'selected' : '' ?>>Entrepreneuriat</option>
+                            <option value="education" <?= $cat === 'education' ? 'selected' : '' ?>>Éducation</option>
+                            <option value="social" <?= $cat === 'social' ? 'selected' : '' ?>>Social & Développement</option>
+                            <option value="politique" <?= $cat === 'politique' ? 'selected' : '' ?>>Politique</option>
+                            <option value="actualites" <?= $cat === 'actualites' ? 'selected' : '' ?>>Actualités</option>
+                            <option value="temoignages" <?= $cat === 'temoignages' ? 'selected' : '' ?>>Témoignages</option>
+                            <option value="conseils" <?= $cat === 'conseils' ? 'selected' : '' ?>>Conseils & Astuces</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -312,9 +315,10 @@ HTML_BLOCK; ?>
                             <i class="fas fa-eye mr-2"></i>
                             Statut de publication
                         </label>
+                        <?php $st = old('status', $article?->status ?? 'draft'); ?>
                         <select name="status" id="id_status" class="form-input form-select" required>
-                            <option value="draft">Brouillon</option>
-                            <option value="published">Publié</option>
+                            <option value="draft" <?= $st === 'draft' ? 'selected' : '' ?>>Brouillon</option>
+                            <option value="published" <?= $st === 'published' ? 'selected' : '' ?>>Publié</option>
                         </select>
                     </div>
                 </div>
@@ -340,6 +344,10 @@ HTML_BLOCK; ?>
                         <p class="text-xs text-gray-500 mt-2">Format recommandé : 1200x630 pixels (JPG, PNG, WebP)</p>
                     </div>
                     <img id="image-preview" class="image-preview" src="#" alt="Aperçu de l'image">
+                    <?php if (!empty($article?->featured_image)): ?>
+                    <p class="text-sm text-gray-500 mt-2">Image actuelle : <?= e(basename((string) $article->featured_image)) ?></p>
+                    <img src="<?= e(media_url((string) $article->featured_image)) ?>" alt="" class="mt-2 max-h-40 rounded-lg">
+                    <?php endif; ?>
                 </div>
 
                 <!-- Content Editor -->
@@ -406,7 +414,7 @@ HTML_BLOCK; ?>
                         Extrait de l'article
                     </label>
                     <textarea name="excerpt" id="id_excerpt" class="form-input form-textarea" 
-                              placeholder="Résumé court de l'article qui apparaîtra dans les aperçus..."></textarea>
+                              placeholder="Résumé court de l'article qui apparaîtra dans les aperçus..."><?= e(old('excerpt', $article?->excerpt ?? '')) ?></textarea>
                     <div class="char-counter" id="excerpt-counter">0/300</div>
                 </div>
 
@@ -450,7 +458,11 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         placeholder: 'Commencez à écrire votre article ici...'
     });
-    
+    <?php if (!empty($article?->content)): ?>
+    quill.root.innerHTML = <?= json_encode((string) $article->content, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
+    document.getElementById('id_content').value = quill.root.innerHTML;
+    <?php endif; ?>
+
     // Character counters
     const titleInput = document.getElementById('id_title');
     const excerptInput = document.getElementById('id_excerpt');

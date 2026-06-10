@@ -9,4 +9,9 @@ use App\Core\Model;
 class Gallery extends Model
 {
     protected static string $table = 'portefolio_gallery';
+
+    public function getCategoryDisplay(): string
+    {
+        return gallery_label((string) $this->category);
+    }
 }

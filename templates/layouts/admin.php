@@ -86,21 +86,21 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg">
-                        <i class="fas fa-photo-video w-6"></i>
-                        <span>Médias</span>
+                    <a href="<?= url('admin_contacts') ?>" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg <?php if (str_contains($_SERVER['REQUEST_URI'] ?? '', 'admin/contacts')): ?>bg-primary/10<?php endif; ?>">
+                        <i class="fas fa-envelope w-6"></i>
+                        <span>Contacts</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg">
-                        <i class="fas fa-users w-6"></i>
-                        <span>Utilisateurs</span>
+                    <a href="<?= url('admin_newsletter') ?>" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg <?php if (str_contains($_SERVER['REQUEST_URI'] ?? '', 'admin/newsletter')): ?>bg-primary/10<?php endif; ?>">
+                        <i class="fas fa-paper-plane w-6"></i>
+                        <span>Newsletter</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg">
-                        <i class="fas fa-cog w-6"></i>
-                        <span>Paramètres</span>
+                    <a href="<?= url('admin_campaigns') ?>" class="flex items-center p-2 text-gray-700 hover:bg-primary/10 rounded-lg <?php if (str_contains($_SERVER['REQUEST_URI'] ?? '', 'admin/campaigns')): ?>bg-primary/10<?php endif; ?>">
+                        <i class="fas fa-bullhorn w-6"></i>
+                        <span>Campagnes</span>
                     </a>
                 </li>
             </ul>
@@ -111,7 +111,7 @@
                     <i class="fas fa-user"></i>
                 </div>
                 <div class="ml-3">
-                    <p class="text-sm font-medium text-gray-700">{{ request.user.username }}</p>
+                    <p class="text-sm font-medium text-gray-700"><?= e(\App\Core\Auth::user()?->username ?? 'Admin') ?></p>
                     <a href="<?= url('admin_logout') ?>" class="text-red-600 hover:text-red-800">
                         <i class="fas fa-sign-out-alt mr-2"></i>Déconnexion
                     </a>
@@ -122,16 +122,28 @@
 
     <!-- Main Content -->
     <main class="main-content min-h-screen p-6">
-        <?php if ($messages): ?>
+        <?php
+        $flashSuccess = flash('success');
+        $flashError = flash('error');
+        ?>
+        <?php if ($flashSuccess): ?>
         <div class="mb-6">
-            <?php $__loop_items = $messages; foreach ($messages as $message): ?>
-            <div class="p-4 rounded-lg <?php if ($message->tags === 'success'): ?>bg-green-100 text-green-700 border border-green-200<?php elseif ($message->tags === 'error'): ?>bg-red-100 text-red-700 border border-red-200<?php else: ?>bg-blue-100 text-blue-700 border border-blue-200<?php endif; ?> animate-fade-in">
+            <div class="p-4 rounded-lg bg-green-100 text-green-700 border border-green-200 animate-fade-in">
                 <div class="flex items-center">
-                    <i class="fas <?php if ($message->tags === 'success'): ?>fa-check-circle<?php elseif ($message->tags === 'error'): ?>fa-exclamation-circle<?php else: ?>fa-info-circle<?php endif; ?> mr-2"></i>
-                    <?= e($message) ?>
+                    <i class="fas fa-check-circle mr-2"></i>
+                    <?= e($flashSuccess) ?>
                 </div>
             </div>
-            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
+        <?php if ($flashError): ?>
+        <div class="mb-6">
+            <div class="p-4 rounded-lg bg-red-100 text-red-700 border border-red-200 animate-fade-in">
+                <div class="flex items-center">
+                    <i class="fas fa-exclamation-circle mr-2"></i>
+                    <?= e($flashError) ?>
+                </div>
+            </div>
         </div>
         <?php endif; ?>
 

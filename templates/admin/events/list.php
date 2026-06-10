@@ -83,7 +83,9 @@
                                 <div>
                                     <div class="font-medium"><?= e(date('d M Y', strtotime((string) ($event->date ?? '')))) ?></div>
                                     <?php if ($event->time): ?>
-                                    <div class="text-sm text-gray-500">{{ event.time|time:"H:i" }}</div>
+                                    <?php if ($event->time): ?>
+                                    <div class="text-sm text-gray-500"><?= e(substr((string) $event->time, 0, 5)) ?></div>
+                                    <?php endif; ?>
                                     <?php endif; ?>
                                 </div>
                             </td>

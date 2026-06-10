@@ -220,7 +220,7 @@ HTML_BLOCK; ?>
         <div class="flex items-center justify-between">
             <h3 class="text-lg font-semibold text-gray-800">Images de la Galerie</h3>
             <div class="flex items-center space-x-2">
-                <span class="text-sm text-gray-500">{{ gallery_items|length }} éléments</span>
+                <span class="text-sm text-gray-500"><?= e(count($gallery_items)) ?> éléments</span>
             </div>
         </div>
     </div>
@@ -259,7 +259,7 @@ HTML_BLOCK; ?>
             <?php if ($is_paginated): ?>
                 <div class="mt-8 flex items-center justify-between">
                     <div class="text-sm text-gray-500">
-                        Affichage de <?= e($page_obj->start_index) ?> à <?= e($page_obj->end_index) ?> sur {{ page_obj.paginator.count }} éléments
+                        Page <?= e($page_obj->number) ?> · <?= e($total_items) ?> élément(s) au total
                     </div>
                     <div class="flex items-center space-x-2">
                         <?php if ($page_obj->has_previous): ?>
@@ -272,14 +272,14 @@ HTML_BLOCK; ?>
                         <?php endif; ?>
                         
                         <span class="px-3 py-1 text-sm bg-primary text-white rounded-lg">
-                            <?= e($page_obj->number) ?> / {{ page_obj.paginator.num_pages }}
+                            <?= e($page_obj->number) ?>
                         </span>
                         
                         <?php if ($page_obj->has_next): ?>
                             <a href="?page=<?= e($page_obj->next_page_number) ?>" class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
                                 Suivant<i class="fas fa-angle-right ml-1"></i>
                             </a>
-                            <a href="?page={{ page_obj.paginator.num_pages }}" class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
+                            <a href="?page=<?= e($page_obj->next_page_number) ?>" class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
                                 Dernière<i class="fas fa-angle-double-right ml-1"></i>
                             </a>
                         <?php endif; ?>

@@ -230,6 +230,7 @@ HTML_BLOCK; ?>
                                 Titre de l'événement
                             </label>
                             <input type="text" name="title" id="id_title" class="form-input" 
+                                   value="<?= e(old('title', $event?->title ?? '')) ?>"
                                    placeholder="Entrez un titre accrocheur..." required>
                             <div class="char-counter" id="title-counter">0/100</div>
                         </div>
@@ -241,6 +242,7 @@ HTML_BLOCK; ?>
                                 Slug (URL)
                             </label>
                             <input type="text" name="slug" id="id_slug" class="form-input" 
+                                   value="<?= e(old('slug', $event?->slug ?? '')) ?>"
                                    placeholder="titre-de-l-evenement" required>
                             <p class="text-xs text-gray-500 mt-1">Généré automatiquement</p>
                         </div>
@@ -285,7 +287,7 @@ HTML_BLOCK; ?>
                             <i class="fas fa-calendar mr-2"></i>
                             Date de début
                         </label>
-                        <input type="date" name="date" id="id_date" class="form-input" required>
+                        <input type="date" name="date" id="id_date" class="form-input" value="<?= e(old('date', $event?->date ?? '')) ?>" required>
                     </div>
                     <div class="form-group">
                         <label for="id_time" class="form-label">
