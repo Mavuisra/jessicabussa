@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Core;
 
+use PDOException;
+use RuntimeException;
+
 abstract class Model
 {
     protected static string $table;
@@ -66,8 +69,12 @@ abstract class Model
 
     public static function all(string $orderBy = 'id DESC'): array
     {
-        $stmt = Database::connection()->query('SELECT * FROM ' . static::table() . ' ORDER BY ' . $orderBy);
-        return array_map(fn ($row) => static::hydrate($row), $stmt->fetchAll());
+        try {
+            $stmt = Database::connection()->query('SELECT * FROM ' . static::table() . ' ORDER BY ' . $orderBy);
+            return array_map(fn ($row) => static::hydrate($row), $stmt->fetchAll());
+        } catch (PDOException $e) {
+            self::rethrowMissingTable($e);
+        }
     }
 
     public static function where(string $column, mixed $value, string $operator = '='): array
@@ -145,6 +152,27 @@ abstract class Model
         }
         $stmt = Database::connection()->prepare('DELETE FROM ' . static::table() . ' WHERE id = ?');
         return $stmt->execute([$this->attributes['id']]);
+    }
+
+    private static function rethrowMissingTable(PDOException $e): never
+    {
+        $message = $e->getMessage();
+
+        if (!str_contains($message, 'no such table') && !str_contains($message, "doesn't exist")) {
+            throw $e;
+        }
+
+        $driver = config('database')['driver'] ?? 'unknown';
+        $table = static::table();
+        $hint = $driver === 'mysql'
+            ? "Importez le fichier database/schema.mysql.sql dans phpMyAdmin (base " . env('DB_NAME', '') . ")."
+            : 'Sur LWS, uploadez .env.production avec DB_DRIVER=mysql à la racine du site.';
+
+        throw new RuntimeException(
+            "Table « {$table} » introuvable ({$driver}). {$hint}",
+            0,
+            $e
+        );
     }
 
     public static function paginate(string $where, array $params, int $page, int $perPage, string $orderBy = 'id DESC'): array

@@ -37,9 +37,24 @@ final class Database
             self::$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             self::$connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            throw new RuntimeException('Database connection failed: ' . $e->getMessage(), 0, $e);
+            $hint = self::connectionHint($config);
+            throw new RuntimeException(
+                'Database connection failed: ' . $e->getMessage() . ($hint ? ' — ' . $hint : ''),
+                0,
+                $e
+            );
         }
 
         return self::$connection;
+    }
+
+    /** @param array<string, mixed> $config */
+    private static function connectionHint(array $config): string
+    {
+        if (($config['driver'] ?? '') === 'sqlite') {
+            return 'Le site utilise SQLite. Sur LWS, placez un fichier .env.production avec DB_DRIVER=mysql à la racine du site.';
+        }
+
+        return 'Vérifiez DB_HOST, DB_NAME, DB_USER et DB_PASSWORD dans .env.production ou .env.';
     }
 }

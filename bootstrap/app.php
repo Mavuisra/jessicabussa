@@ -75,4 +75,7 @@ function bootstrap_app(string $entryFile): void
         register_fallback_autoload(BASE_PATH);
         require BASE_PATH . '/src/helpers.php';
     }
+
+    require_once BASE_PATH . '/src/Core/EnvLoader.php';
+    \App\Core\EnvLoader::load(BASE_PATH);
 }

@@ -15,11 +15,14 @@ else
     echo "Attention: composer absent — uploadez vendor/ depuis votre PC"
 fi
 
-echo "Configuration .env..."
+echo "Configuration environnement..."
+if [ ! -f .env.production ] && [ -f .env.production.example ]; then
+    cp .env.production.example .env.production
+    echo "→ .env.production créé depuis l'exemple — complétez DB_PASSWORD et MAIL_PASSWORD"
+fi
 if [ ! -f .env ] && [ -f .env.production ]; then
     cp .env.production .env
-elif [ ! -f .env ] && [ -f .env.production.example ]; then
-    cp .env.production.example .env
+    echo "→ .env créé (optionnel : l'app charge aussi .env.production directement)"
 fi
 
 echo "Permissions storage/media..."

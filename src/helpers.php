@@ -9,25 +9,7 @@ function e(mixed $value): string
 
 function env(string $key, mixed $default = null): mixed
 {
-    static $loaded = false;
-    static $vars = [];
-
-    if (!$loaded) {
-        $path = base_path('.env');
-        if (is_file($path)) {
-            foreach (file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
-                $line = trim($line);
-                if ($line === '' || str_starts_with($line, '#') || !str_contains($line, '=')) {
-                    continue;
-                }
-                [$name, $value] = explode('=', $line, 2);
-                $vars[trim($name)] = trim($value, " \t\"'");
-            }
-        }
-        $loaded = true;
-    }
-
-    return $vars[$key] ?? $_ENV[$key] ?? getenv($key) ?: $default;
+    return \App\Core\EnvLoader::get($key, $default);
 }
 
 function config(string $file): array
