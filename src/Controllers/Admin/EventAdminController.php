@@ -21,7 +21,7 @@ final class EventAdminController extends Controller
             'total_events' => Event::count(),
             'published_events' => Event::count("status = 'published'"),
             'draft_events' => Event::count("status = 'draft'"),
-            'upcoming_events' => Event::count("status = 'published' AND date >= date('now')"),
+            'upcoming_events' => Event::count("status = 'published' AND date >= " . sql_today()),
             'page_obj' => (object) [
                 'number' => $pagination['page'],
                 'has_previous' => $pagination['page'] > 1,

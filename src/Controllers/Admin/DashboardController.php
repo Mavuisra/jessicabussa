@@ -35,7 +35,7 @@ final class DashboardController extends Controller
             'total_events' => Event::count(),
             'published_events' => Event::count("status = 'published'"),
             'draft_events' => Event::count("status = 'draft'"),
-            'upcoming_events' => Event::count("status = 'published' AND date >= date('now')"),
+            'upcoming_events' => Event::count("status = 'published' AND date >= " . sql_today()),
             'recent_events' => array_slice(Event::all('created_at DESC'), 0, 5),
             'total_views' => $totalViews,
             'total_unique_visitors' => BlogVisitor::count(),

@@ -2,17 +2,29 @@
 DirectoryIndex index.php index.html
 
 RewriteEngine On
+RewriteBase /
 
 <IfModule mod_authz_core.c>
     Require all granted
 </IfModule>
 
-# Assets (repo cloné avec public/ en sous-dossier)
+# Images/CSS/JS à la racine du repo (static/images/…)
+RewriteCond %{DOCUMENT_ROOT}/static/$1 -f
+RewriteRule ^static/(.*)$ static/$1 [L]
+
+# Assets dans public/static/ (css, js)
+RewriteCond %{DOCUMENT_ROOT}/public/static/$1 -f
 RewriteRule ^static/(.*)$ public/static/$1 [L]
 
-# Fichiers uploadés
+# Uploads Django (media/articles/, media/events/, …)
+RewriteCond %{DOCUMENT_ROOT}/media/$1 -f
+RewriteRule ^media/(.*)$ media/$1 [L]
+
+# Application PHP — ne pas envoyer static/media manquants vers index.php
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/static/
+RewriteCond %{REQUEST_URI} !^/media/
 RewriteRule ^ index.php [L]
 
 Options -Indexes

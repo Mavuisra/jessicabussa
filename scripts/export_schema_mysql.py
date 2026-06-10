@@ -7,14 +7,26 @@ ROOT = Path(__file__).resolve().parent.parent
 
 
 def sqlite_type_to_mysql(sql: str) -> str:
-    sql = re.sub(r'\binteger\b', 'INT', sql, flags=re.I)
-    sql = re.sub(r'\bbigint\b', 'BIGINT', sql, flags=re.I)
-    sql = re.sub(r'\bsmallint\b', 'SMALLINT', sql, flags=re.I)
-    sql = re.sub(r'\bbool\b', 'TINYINT(1)', sql, flags=re.I)
-    sql = re.sub(r'\bdatetime\b', 'DATETIME', sql, flags=re.I)
-    sql = re.sub(r'\bdate\b', 'DATE', sql, flags=re.I)
-    sql = re.sub(r'\btime\b', 'TIME', sql, flags=re.I)
-    sql = re.sub(r'\btext\b', 'TEXT', sql, flags=re.I)
+    """Convertit les types SQLite en types MySQL sans toucher aux noms de colonnes."""
+    type_map = {
+        'integer': 'INT',
+        'bigint': 'BIGINT',
+        'smallint': 'SMALLINT',
+        'bool': 'TINYINT(1)',
+        'datetime': 'DATETIME',
+        'date': 'DATE',
+        'time': 'TIME',
+        'text': 'TEXT',
+    }
+
+    for sqlite_type, mysql_type in type_map.items():
+        sql = re.sub(
+            rf'(\s){sqlite_type}(\s)',
+            rf'\1{mysql_type}\2',
+            sql,
+            flags=re.I,
+        )
+
     return sql
 
 

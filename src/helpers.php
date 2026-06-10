@@ -12,6 +12,26 @@ function env(string $key, mixed $default = null): mixed
     return \App\Core\EnvLoader::get($key, $default);
 }
 
+function sql_today(): string
+{
+    return (config('database')['driver'] ?? 'sqlite') === 'mysql' ? 'CURDATE()' : "date('now')";
+}
+
+/**
+ * LIMIT/OFFSET en SQL brut — requis pour MySQL/MariaDB (les placeholders ? sont quotés).
+ */
+function sql_limit(int $limit, int $offset = 0): string
+{
+    $limit = max(0, $limit);
+    $offset = max(0, $offset);
+
+    if ($offset > 0) {
+        return 'LIMIT ' . $limit . ' OFFSET ' . $offset;
+    }
+
+    return 'LIMIT ' . $limit;
+}
+
 function config(string $file): array
 {
     static $cache = [];
@@ -48,7 +68,15 @@ function media_url(?string $path): string
     if (!$path) {
         return '';
     }
-    return '/media/' . ltrim(str_replace('\\', '/', $path), '/');
+
+    $path = ltrim(str_replace('\\', '/', $path), '/');
+
+    // Ancien Django : certaines images blog sont dans static/images/
+    if (str_starts_with($path, 'images/')) {
+        return asset($path);
+    }
+
+    return '/media/' . $path;
 }
 
 function asset(string $path): string

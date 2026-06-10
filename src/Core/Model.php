@@ -179,9 +179,9 @@ abstract class Model
     {
         $offset = max(0, ($page - 1) * $perPage);
         $total = static::count($where, $params);
-        $sql = 'SELECT * FROM ' . static::table() . ' WHERE ' . $where . ' ORDER BY ' . $orderBy . ' LIMIT ? OFFSET ?';
+        $sql = 'SELECT * FROM ' . static::table() . ' WHERE ' . $where . ' ORDER BY ' . $orderBy . ' ' . sql_limit($perPage, $offset);
         $stmt = Database::connection()->prepare($sql);
-        $stmt->execute([...$params, $perPage, $offset]);
+        $stmt->execute($params);
         $items = array_map(fn ($row) => static::hydrate($row), $stmt->fetchAll());
 
         return [

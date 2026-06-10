@@ -28,4 +28,10 @@ fi
 echo "Permissions storage/media..."
 chmod -R 775 storage media 2>/dev/null || true
 
+if [ -f database/db.sqlite3 ]; then
+    echo "Migration SQLite → MySQL..."
+    php scripts/migrate-sqlite-to-mysql.php --install-schema || true
+fi
+
 echo "OK — vérifiez que index.php est à la racine du site."
+echo "Sans db.sqlite3 sur le serveur : importez database/schema.mysql.sql puis database/data.mysql.sql dans phpMyAdmin."

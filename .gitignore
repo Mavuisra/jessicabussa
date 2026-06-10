@@ -26,10 +26,13 @@ composer.lock
 # Base de données locale
 *.sqlite3
 db.sqlite3
+database/data.mysql.sql
+database/full-install.mysql.sql
 
 # Uploads utilisateurs
 /media/*
 !/media/.gitkeep
+!/media/.htaccess
 
 # Python (scripts utilitaires)
 *.pyc

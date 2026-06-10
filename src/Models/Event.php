@@ -23,8 +23,7 @@ class Event extends Model
     public static function publishedUpcoming(int $limit = 3): array
     {
         return static::query(
-            "SELECT * FROM portefolio_event WHERE status = 'published' AND date >= date('now') ORDER BY date ASC LIMIT ?",
-            [$limit]
+            'SELECT * FROM portefolio_event WHERE status = \'published\' AND date >= ' . sql_today() . ' ORDER BY date ASC ' . sql_limit($limit)
         );
     }
 

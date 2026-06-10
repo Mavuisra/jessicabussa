@@ -23,8 +23,7 @@ class Article extends Model
     public static function recentPublished(int $limit = 3): array
     {
         return static::query(
-            "SELECT * FROM portefolio_article WHERE status = 'published' ORDER BY created_at DESC LIMIT ?",
-            [$limit]
+            "SELECT * FROM portefolio_article WHERE status = 'published' ORDER BY created_at DESC " . sql_limit($limit)
         );
     }
 }
